@@ -17,7 +17,7 @@
       -webkit-user-select: none;
     }
 
-    /* 1. 100% FULL-SCREEN FILLED CODE VIEWPORT */
+    /* 1. 100% SCREEN-FILLED CODE BACKGROUND */
     #code-viewport {
       position: fixed;
       top: 0; left: 0;
@@ -59,7 +59,6 @@
       overflow: hidden;
     }
 
-    /* Syntax Highlighting */
     .kw { color: #f47067; font-weight: bold; }
     .fn { color: #dcbdfb; }
     .str { color: #96d0ff; }
@@ -68,7 +67,6 @@
     .comm { color: #384252; font-style: italic; }
     .var { color: #adbac7; }
 
-    /* Dark Vignette Overlay */
     #dark-veil {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -77,76 +75,105 @@
       pointer-events: none;
     }
 
-    /* 2. LYRIC CARDS (UNIFIED IPAD-SAFE ANIMATION) */
+    /* ==========================================================
+       2. LARGER SAD CARD (ONE SIDE + MULTI-ANGLE DRIFT)
+       ========================================================== */
     .sad-card {
       position: fixed;
-      width: min(88vw, 320px);
-      min-height: 105px;
-      padding: 18px 22px;
+      /* BIGGER DIMENSIONS */
+      width: min(90vw, 420px);
+      min-height: 135px;
+      padding: 24px 28px;
       background: linear-gradient(150deg, rgba(21, 29, 42, 0.95) 0%, rgba(9, 14, 23, 0.97) 100%);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(176, 196, 222, 0.35);
-      border-radius: 12px;
+      border: 1px solid rgba(176, 196, 222, 0.38);
+      border-radius: 14px;
       box-shadow: 
-        0 16px 36px rgba(0, 0, 0, 0.85),
-        0 4px 18px rgba(30, 58, 95, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        0 20px 42px rgba(0, 0, 0, 0.9),
+        0 6px 22px rgba(30, 58, 95, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
       z-index: 9999;
       pointer-events: none;
+      
+      /* Multi-angle dynamic float lifecycle */
       animation: cardLifecycle 8.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: transform, opacity;
     }
 
     .sad-card::before {
-      content: ''; position: absolute; inset: 5px;
-      border: 1px solid rgba(176, 196, 222, 0.15); border-radius: 7px; pointer-events: none;
+      content: ''; position: absolute; inset: 6px;
+      border: 1px solid rgba(176, 196, 222, 0.16); border-radius: 9px; pointer-events: none;
     }
 
     .card-meta {
-      font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.16em;
-      text-transform: uppercase; color: rgba(176, 196, 222, 0.6); text-align: center; margin-bottom: 7px;
+      font-family: 'Courier New', monospace; 
+      font-size: 11px; 
+      letter-spacing: 0.18em;
+      text-transform: uppercase; 
+      color: rgba(176, 196, 222, 0.65); 
+      text-align: center; 
+      margin-bottom: 9px;
     }
 
     .card-lyric {
-      color: #edf2f7; font-size: 16px; font-weight: 500; line-height: 1.45;
-      letter-spacing: -0.01em; text-align: center; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+      color: #edf2f7; 
+      font-size: 19px; /* BIGGER, CLEARER TEXT */
+      font-weight: 550; 
+      line-height: 1.5;
+      letter-spacing: -0.015em; 
+      text-align: center; 
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
     }
 
     .lyric-word {
       display: inline-block;
       opacity: 0;
-      transform: translateY(4px);
+      transform: translateY(5px);
       animation: wordReveal 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      margin: 0 2px;
+      margin: 0 3px;
     }
     @keyframes wordReveal { to { opacity: 1; transform: translateY(0); } }
 
     .doodle-emote {
       display: inline-block;
-      margin-left: 6px;
+      margin-left: 8px;
       font-family: 'Courier New', monospace;
-      font-size: 14.5px;
+      font-size: 16px;
       font-weight: bold;
       color: #90cdf4;
-      border: 1px solid rgba(144, 205, 244, 0.35);
-      padding: 1px 6px;
-      border-radius: 6px;
-      background: rgba(144, 205, 244, 0.08);
+      border: 1px solid rgba(144, 205, 244, 0.4);
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: rgba(144, 205, 244, 0.1);
       letter-spacing: 0.05em;
       animation: gentlePulse 1.4s ease infinite;
       vertical-align: middle;
     }
     @keyframes gentlePulse {
       0%, 100% { opacity: 0.75; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.05); }
+      50% { opacity: 1; transform: scale(1.06); }
     }
 
+    /* DYNAMIC MULTI-ANGLE FLOAT KEYFRAME */
     @keyframes cardLifecycle {
-      0% { opacity: 0; transform: translateY(22px) scale(0.92); }
-      6% { opacity: 1; transform: translateY(0) scale(1); }
-      75% { opacity: 1; transform: translateY(-360px) scale(1); }
-      100% { opacity: 0; transform: translateY(-460px) scale(0.95); }
+      0% {
+        opacity: 0;
+        /* Enters from a diagonal angle based on --start-dx and --rot */
+        transform: translate3d(var(--start-dx, 0px), 40px, 0) scale(0.9) rotate(calc(var(--rot, 0deg) * 1.4));
+      }
+      7% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(var(--rot, 0deg));
+      }
+      75% {
+        opacity: 1;
+        transform: translate3d(calc(var(--start-dx, 0px) * -0.4), -370px, 0) scale(1) rotate(var(--rot, 0deg));
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(calc(var(--start-dx, 0px) * -0.8), -480px, 0) scale(0.94) rotate(calc(var(--rot, 0deg) * 0.8));
+      }
     }
 
     /* Ambient Drawing Doodles */
@@ -178,7 +205,7 @@
   <div id="dark-veil"></div>
 
   <script>
-    // 1. DYNAMICALLY FILLS 100% OF IPAD SCREEN (ZERO EMPTY SPACE)
+    // 1. DYNAMICALLY FILLS 100% OF SCREEN
     function fillCodeBackground() {
       const container = document.getElementById('code-viewport');
       container.innerHTML = '';
@@ -207,7 +234,6 @@
       ];
 
       const cols = window.innerWidth > 800 ? 3 : 2;
-      // Calculates exact line count so the bottom of iPad is never empty
       const linesNeeded = Math.ceil(window.innerHeight / 10) + 12;
 
       let lineCounter = 1;
@@ -240,16 +266,16 @@
     ];
 
     let activeCards = [];
-    let laneCounter = 0;
+    let cardCount = 0;
 
     function playLoop() {
       TIMED_LYRICS.forEach(item => {
         setTimeout(() => {
           spawnWordByWordCard(item.text, item.duration, item.emote);
-          laneCounter++;
+          cardCount++;
         }, item.time * 1000);
       });
-      setTimeout(playLoop, 28000); // Continuous loop
+      setTimeout(playLoop, 28000); // Loops continuously
     }
 
     function init() {
@@ -258,7 +284,6 @@
       playLoop();
     }
 
-    // Runs immediately on page load
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       init();
     } else {
@@ -271,24 +296,34 @@
       const card = document.createElement('div');
       card.className = 'sad-card';
       card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
+
+      // --- DIFFERENT ENTRANCE ANGLE & TILT FOR EVERY CARD ---
+      // Alternates natural angles: -3.5° to +3.8°
+      const angleSign = (cardCount % 2 === 0) ? 1 : -1;
+      const tiltAngle = angleSign * (1.8 + (Math.random() * 2.0));
+      // Varied horizontal entry angle offset
+      const startAngleDx = ((cardCount % 3) - 1) * 28;
+
+      card.style.setProperty('--rot', `${tiltAngle}deg`);
+      card.style.setProperty('--start-dx', `${startAngleDx}px`);
+
       document.body.appendChild(card);
 
-      const cardWidth = card.offsetWidth || 300;
-      const cardHeight = card.offsetHeight || 110;
+      const cardWidth = card.offsetWidth || 380;
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
       let targetX, targetY;
 
+      // --- ANCHORED TO ONE SIDE ONLY (RIGHT SIDE) ---
       if (screenW < 700) {
-        const offsets = [-8, 8, 0];
-        targetX = Math.max(16, (screenW - cardWidth) / 2 + offsets[laneCounter % 3]);
-        targetY = screenH * 0.70;
+        // Mobile screen: comfortable centered-right placement
+        targetX = Math.max(16, (screenW - cardWidth) / 2);
+        targetY = screenH * 0.68;
       } else {
-        const padding = screenW * 0.12;
-        targetX = (laneCounter % 2 === 0) 
-          ? padding + (Math.random() * 30) 
-          : (screenW - cardWidth - padding - (Math.random() * 30));
-        targetY = screenH * 0.62;
+        // iPad / Large Screen: Anchored to the RIGHT SIDE with margin
+        const rightMargin = Math.max(30, screenW * 0.08);
+        targetX = screenW - cardWidth - rightMargin;
+        targetY = screenH * 0.64;
       }
 
       card.style.left = `${targetX}px`;
@@ -296,6 +331,7 @@
       const cardObj = { el: card, y: targetY };
       activeCards.push(cardObj);
 
+      // Word-by-Word Engine
       const lyricEl = card.querySelector('.card-lyric');
       const words = fullText.split(' ');
       const perWordDelay = (vocalDuration * 1000) / words.length;
@@ -316,6 +352,7 @@
         }, index * perWordDelay);
       });
 
+      // Cleanup
       setTimeout(() => {
         card.remove();
         activeCards = activeCards.filter(c => c !== cardObj);
