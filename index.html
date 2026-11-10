@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Merry Christmas, I Miss You</title>
+  <title>Late November</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -11,43 +11,38 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #06080d;
+      background-color: #080a0f;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
       -webkit-user-select: none;
-      -webkit-text-size-adjust: none;
     }
 
-    /* 1. MICROSCOPIC BACKGROUND CODE (~3.5px) */
+    /* 1. CODE BACKGROUND */
     #code-viewport {
       position: fixed;
       top: 0; left: 0;
-      width: 170%;
-      height: 170%;
+      width: 170%; height: 170%;
       background-color: #06080d;
       display: flex;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 6px;
-      line-height: 1.18;
-      letter-spacing: -0.01em;
-      transform: scale(0.58);
+      font-size: clamp(6.5px, 1.4vw, 8.5px);
+      line-height: 1.25;
+      transform: scale(0.6);
       transform-origin: top left;
       z-index: 0;
-      opacity: 0.85;
-      overflow: hidden;
+      opacity: 0.8;
       pointer-events: none;
     }
 
     .code-pane {
       flex: 1;
       display: flex;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-right: 1px solid #141a24;
-      overflow: hidden;
     }
 
     .gutter {
-      width: 30px;
+      width: 32px;
       text-align: right;
       padding-right: 8px;
       color: #273142;
@@ -74,7 +69,7 @@
     #dark-veil {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 60%, rgba(8, 11, 16, 0.45) 0%, rgba(4, 6, 9, 0.88) 100%);
+      background: radial-gradient(circle at 50% 60%, rgba(8, 11, 16, 0.4) 0%, rgba(4, 6, 9, 0.85) 100%);
       z-index: 1;
       pointer-events: none;
     }
@@ -169,79 +164,37 @@
 
     @keyframes cardEntrance { 0% { transform: scale(0.9) translateY(14px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
     @keyframes cardDrift { 0% { transform: translateY(0); opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(-460px); opacity: 0; } }
-
-    /* 3. GUARANTEED VISIBLE START SCREEN */
-    #start-screen {
-      position: fixed !important;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 7, 11, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #edf2f7;
-      z-index: 99999;
-      cursor: pointer;
-    }
-    #start-btn {
-      padding: 18px 46px;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: #e2e8f0;
-      border: 1px solid rgba(176, 196, 222, 0.4);
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.8);
-      transition: transform 0.2s ease;
-    }
-    #start-btn:active { transform: scale(0.96); }
-    .subtitle { margin-top: 14px; opacity: 0.6; font-size: 13px; font-family: 'Courier New', monospace; }
   </style>
 </head>
-<body onclick="startShow()">
+<body>
 
-  <!-- MICROSCOPIC COMPLEX CODE WALL -->
+  <!-- BACKGROUND CODE -->
   <div id="code-viewport">
     <div class="code-pane">
       <div class="gutter">
-1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30
       </div>
       <div class="code-content">
-<span class="kw">#include</span> <span class="str">&lt;immintrin.h&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;complex&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
 
-<span class="comm">// FAST FOURIER AUDIO SPECTRUM KERNEL (AVX-512)</span>
+<span class="comm">// FAST FOURIER AUDIO SPECTRUM KERNEL</span>
 <span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">Scalar</span>&gt;
 <span class="kw">struct</span> <span class="type">FFTSpectrumEngine</span> {
-    <span class="type">size_t</span> <span class="var">dim</span>;
-    <span class="type">std::vector</span>&lt;<span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;&gt; <span class="var">omega</span>;
-    <span class="type">uintptr_t</span> <span class="var">m_alloc_ptr</span> = <span class="hex">0x7FFE9B42A000</span>;
+    <span class="type">size_t</span> <span class="var">dim</span> = <span class="hex">1024</span>;
+    <span class="type">uintptr_t</span> <span class="var">m_alloc</span> = <span class="hex">0x7FFE9B42A000</span>;
 
-    <span class="fn">FFTSpectrumEngine</span>(<span class="type">size_t</span> <span class="var">n</span>) : <span class="var">dim</span>(<span class="var">n</span>) {
-        <span class="var">omega</span>.<span class="fn">resize</span>(<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>);
-        <span class="kw">for</span> (<span class="type">size_t</span> <span class="var">k</span> = <span class="hex">0</span>; <span class="var">k</span> &lt; (<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>); ++<span class="var">k</span>) {
-            <span class="type">Scalar</span> <span class="var">theta</span> = -<span class="hex">2.0</span> * <span class="hex">3.141592653589793</span> * <span class="var">k</span> / <span class="var">dim</span>;
-            <span class="var">omega</span>[<span class="var">k</span>] = <span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;(<span class="fn">cos</span>(<span class="var">theta</span>), <span class="fn">sin</span>(<span class="var">theta</span>));
-        }
+    <span class="fn">FFTSpectrumEngine</span>() {
+        <span class="comm">/* Memory aligned buffer allocation */</span>
     }
 };
 
-<span class="comm">// HESSIAN DRIFT ACCUMULATOR</span>
 <span class="kw">class</span> <span class="type">NonlinearDriftSolver</span> {
 <span class="kw">public</span>:
     <span class="type">double</span> <span class="var">jacobian_tensor</span>[<span class="hex">4</span>][<span class="hex">4</span>];
-    <span class="type">double</span> <span class="var">covariance_state</span>[<span class="hex">16</span>];
-
-    <span class="type">void</span> <span class="fn">recompute_spatial_matrix</span>(<span class="type">double</span> <span class="var">dt</span>) {
+    <span class="type">void</span> <span class="fn">recompute</span>(<span class="type">double</span> <span class="var">dt</span>) {
         <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="hex">0</span>; <span class="var">i</span> &lt; <span class="hex">4</span>; ++<span class="var">i</span>) {
-            <span class="kw">for</span> (<span class="type">int</span> <span class="var">j</span> = <span class="hex">0</span>; <span class="var">j</span> &lt; <span class="hex">4</span>; ++<span class="var">j</span>) {
-                <span class="var">jacobian_tensor</span>[<span class="var">i</span>][<span class="var">j</span>] = (<span class="var">i</span> == <span class="var">j</span>) ? <span class="hex">1.0</span> : <span class="fn">sin</span>(<span class="var">dt</span>) * <span class="hex">0.024</span>;
-            }
+            <span class="var">jacobian_tensor</span>[<span class="var">i</span>][<span class="var">i</span>] = <span class="hex">1.0</span>;
         }
     }
 };
@@ -250,18 +203,16 @@
 
     <div class="code-pane">
       <div class="gutter">
-51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70
+31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50
       </div>
       <div class="code-content">
-<span class="kw">import</span> asyncio, struct
-<span class="kw">from</span> typing <span class="kw">import</span> <span class="type">AsyncGenerator</span>
-
+<span class="kw">import</span> asyncio
 <span class="comm"># DISPATCHER (NOCTURNAL TELEMETRY)</span>
 <span class="kw">class</span> <span class="type">AsyncSignalMultiplexer</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(self):
-        self.<span class="var">entropy_pool</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>]
+        self.<span class="var">entropy</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>]
 
-    <span class="kw">async def</span> <span class="fn">stream_cadence</span>(self) -> <span class="type">AsyncGenerator</span>:
+    <span class="kw">async def</span> <span class="fn">stream_cadence</span>(self):
         <span class="var">cues</span> = [
             (<span class="hex">0.6</span>,  <span class="str">"when i said, November's early"</span>, <span class="str">"~ ♡"</span>),
             (<span class="hex">2.8</span>,  <span class="str">"to be playing these songs"</span>,     <span class="str">"[ ♫ ]"</span>),
@@ -269,3 +220,112 @@
             (<span class="hex">12.4</span>, <span class="str">"i can see i was wrong"</span>,         <span class="str">"&lt;/3"</span>),
             (<span class="hex">17.2</span>, <span class="str">"so what if i call"</span>,             <span class="str">"[ ☎ ]"</span>),
             (<span class="hex">22.0</span>, <span class="str">"and you pick up the phone?"</span>,    <span class="str">"? &lt;3"</span>)
+        ]
+        <span class="kw">for</span> <span class="var">t</span>, <span class="var">chunk</span>, <span class="var">emote</span> <span class="kw">in</span> <span class="var">cues</span>:
+            <span class="kw">yield</span> {<span class="str">"t"</span>: <span class="var">t</span>, <span class="str">"val"</span>: <span class="var">chunk</span>, <span class="str">"emote"</span>: <span class="var">emote</span>}
+      </div>
+    </div>
+  </div>
+
+  <div id="dark-veil"></div>
+
+  <script>
+    const TIMED_LYRICS = [
+      { time: 0.6,  text: "when i said, November's early", duration: 1.8, emote: "~ ♡" },
+      { time: 2.8,  text: "to be playing these songs",     duration: 1.9, emote: "[ ♫ ]" },
+      { time: 10.2, text: "now when i look back",          duration: 1.6, emote: "( . . )" },
+      { time: 12.4, text: "i can see i was wrong",         duration: 1.8, emote: "</3" },
+      { time: 17.2, text: "so what if i call",             duration: 2.4, emote: "[ ☎ ]" },
+      { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3" }
+    ];
+
+    let activeCards = [];
+    let laneCounter = 0;
+
+    // AUTO-RUNS AS SOON AS THE PAGE OPENS (Just like CodePen)
+    window.addEventListener('DOMContentLoaded', () => {
+      // Spawn floating doodles immediately
+      setInterval(spawnAmbientDoodle, 550);
+
+      // Play lyric cards on timing
+      TIMED_LYRICS.forEach(item => {
+        setTimeout(() => {
+          spawnWordByWordCard(item.text, item.duration, item.emote);
+          laneCounter++;
+        }, item.time * 1000);
+      });
+    });
+
+    function spawnWordByWordCard(fullText, vocalDuration, emote) {
+      const isMobile = window.innerWidth < 650;
+      const card = document.createElement('div');
+      card.className = 'sad-card';
+      card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
+      document.body.appendChild(card);
+
+      const cardWidth = card.offsetWidth;
+      const cardHeight = 110;
+      let targetX, targetY;
+
+      if (isMobile) {
+        const offsets = [-8, 8, 0];
+        targetX = Math.max(16, (window.innerWidth - cardWidth) / 2 + offsets[laneCounter % 3]);
+        targetY = window.innerHeight * 0.70;
+
+        activeCards.forEach(c => {
+          if (c.y > window.innerHeight * 0.46) {
+            c.y -= (cardHeight + 24);
+            c.el.style.top = `${c.y}px`;
+          }
+        });
+      } else {
+        const padding = 70;
+        targetX = (laneCounter % 2 === 0) ? padding + Math.random() * 40 : window.innerWidth - cardWidth - padding - Math.random() * 40;
+        targetY = window.innerHeight * 0.65;
+      }
+
+      card.style.left = `${targetX}px`;
+      card.style.top = `${targetY}px`;
+      const cardObj = { el: card, y: targetY };
+      activeCards.push(cardObj);
+
+      const lyricEl = card.querySelector('.card-lyric');
+      const words = fullText.split(' ');
+      const perWordDelay = (vocalDuration * 1000) / words.length;
+
+      words.forEach((word, index) => {
+        setTimeout(() => {
+          const span = document.createElement('span');
+          span.className = 'lyric-word';
+          span.textContent = word;
+          lyricEl.appendChild(span);
+
+          if (emote && index === words.length - 1) {
+            const emoteEl = document.createElement('span');
+            emoteEl.className = 'doodle-emote';
+            emoteEl.textContent = emote;
+            lyricEl.appendChild(emoteEl);
+          }
+        }, index * perWordDelay);
+      });
+
+      setTimeout(() => {
+        card.remove();
+        activeCards = activeCards.filter(c => c !== cardObj);
+      }, 8200);
+    }
+
+    function spawnAmbientDoodle() {
+      const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩'];
+      const el = document.createElement('div');
+      el.className = 'ambient-doodle';
+      el.textContent = doodleList[Math.floor(Math.random() * doodleList.length)];
+      el.style.fontSize = `${Math.floor(13 + Math.random() * 8)}px`;
+      el.style.left = `${Math.floor(Math.random() * (window.innerWidth - 45))}px`;
+      el.style.top = `${Math.floor(window.innerHeight * 0.70 + Math.random() * (window.innerHeight * 0.25))}px`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5800);
+    }
+  </script>
+</body>
+        </html>
