@@ -11,40 +11,41 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #080a0f;
+      background-color: #06080d;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* 1. CODE BACKGROUND */
+    /* 1. WALL-TO-WALL DENSE CODE BACKGROUND */
     #code-viewport {
       position: fixed;
       top: 0; left: 0;
-      width: 170%; height: 170%;
+      width: 100%; height: 100%;
       background-color: #06080d;
       display: flex;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: clamp(6.5px, 1.4vw, 8.5px);
+      font-size: clamp(6.5px, 1.5vw, 8px);
       line-height: 1.25;
-      transform: scale(0.6);
-      transform-origin: top left;
+      letter-spacing: -0.01em;
       z-index: 0;
-      opacity: 0.8;
+      opacity: 0.85;
       pointer-events: none;
+      overflow: hidden;
     }
 
     .code-pane {
       flex: 1;
       display: flex;
-      padding: 10px 14px;
+      padding: 6px 8px;
       border-right: 1px solid #141a24;
+      overflow: hidden;
     }
 
     .gutter {
-      width: 32px;
+      width: 26px;
       text-align: right;
-      padding-right: 8px;
+      padding-right: 6px;
       color: #273142;
       user-select: none;
       border-right: 1px solid #111622;
@@ -52,9 +53,10 @@
 
     .code-content {
       flex: 1;
-      padding-left: 10px;
+      padding-left: 8px;
       white-space: pre;
       color: #9aa5b5;
+      overflow: hidden;
     }
 
     .kw { color: #f47067; font-weight: bold; }
@@ -62,14 +64,13 @@
     .str { color: #96d0ff; }
     .type { color: #8ddb8c; }
     .hex { color: #6cb6ff; }
-    .comm { color: #3d4756; font-style: italic; }
+    .comm { color: #414b5c; font-style: italic; }
     .var { color: #adbac7; }
 
-    /* Dark Vignette Overlay */
     #dark-veil {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 60%, rgba(8, 11, 16, 0.4) 0%, rgba(4, 6, 9, 0.85) 100%);
+      background: radial-gradient(circle at 50% 55%, rgba(6, 8, 13, 0.35) 0%, rgba(3, 4, 7, 0.82) 100%);
       z-index: 1;
       pointer-events: none;
     }
@@ -141,7 +142,6 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Ambient Drawing Doodles */
     .ambient-doodle {
       position: fixed;
       pointer-events: none;
@@ -168,51 +168,111 @@
 </head>
 <body>
 
-  <!-- BACKGROUND CODE -->
+  <!-- BACKGROUND: 2 PANES FULLY PACKED -->
   <div id="code-viewport">
+    
+    <!-- LEFT COLUMN -->
     <div class="code-pane">
       <div class="gutter">
-1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>71<br>72<br>73<br>74<br>75
       </div>
       <div class="code-content">
+<span class="kw">#include</span> <span class="str">&lt;immintrin.h&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;complex&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
 
-<span class="comm">// FAST FOURIER AUDIO SPECTRUM KERNEL</span>
+<span class="comm">// FAST FOURIER AUDIO SPECTRUM KERNEL (AVX-512)</span>
 <span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">Scalar</span>&gt;
 <span class="kw">struct</span> <span class="type">FFTSpectrumEngine</span> {
-    <span class="type">size_t</span> <span class="var">dim</span> = <span class="hex">1024</span>;
+    <span class="type">size_t</span> <span class="var">dim</span> = <span class="hex">2048</span>;
+    <span class="type">std::vector</span>&lt;<span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;&gt; <span class="var">omega</span>;
     <span class="type">uintptr_t</span> <span class="var">m_alloc</span> = <span class="hex">0x7FFE9B42A000</span>;
 
-    <span class="fn">FFTSpectrumEngine</span>() {
-        <span class="comm">/* Memory aligned buffer allocation */</span>
+    <span class="fn">FFTSpectrumEngine</span>(<span class="type">size_t</span> <span class="var">n</span>) : <span class="var">dim</span>(<span class="var">n</span>) {
+        <span class="var">omega</span>.<span class="fn">resize</span>(<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>);
+        <span class="kw">for</span> (<span class="type">size_t</span> <span class="var">k</span> = <span class="hex">0</span>; <span class="var">k</span> &lt; (<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>); ++<span class="var">k</span>) {
+            <span class="type">Scalar</span> <span class="var">th</span> = -<span class="hex">2.0</span> * <span class="hex">3.141592653589</span> * <span class="var">k</span> / <span class="var">dim</span>;
+            <span class="var">omega</span>[<span class="var">k</span>] = <span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;(<span class="fn">cos</span>(<span class="var">th</span>), <span class="fn">sin</span>(<span class="var">th</span>));
+        }
+    }
+
+    <span class="kw">inline void</span> <span class="fn">execute_butterfly</span>(<span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;* <span class="var">a</span>, <span class="type">size_t</span> <span class="var">stride</span>) {
+        __m512d <span class="var">r</span> = <span class="fn">_mm512_loadu_pd</span>(&amp;<span class="var">a</span>[<span class="hex">0</span>]);
+        __m512d <span class="var">i</span> = <span class="fn">_mm512_loadu_pd</span>(&amp;<span class="var">a</span>[<span class="var">stride</span>]);
+        __m512d <span class="var">acc</span> = <span class="fn">_mm512_fmadd_pd</span>(<span class="var">r</span>, <span class="var">i</span>, <span class="var">r</span>);
+        <span class="fn">_mm512_storeu_pd</span>(&amp;<span class="var">a</span>[<span class="hex">0</span>], <span class="var">acc</span>);
     }
 };
 
+<span class="comm">// HESSIAN EIGENVALUE SPATIAL SOLVER</span>
 <span class="kw">class</span> <span class="type">NonlinearDriftSolver</span> {
 <span class="kw">public</span>:
     <span class="type">double</span> <span class="var">jacobian_tensor</span>[<span class="hex">4</span>][<span class="hex">4</span>];
-    <span class="type">void</span> <span class="fn">recompute</span>(<span class="type">double</span> <span class="var">dt</span>) {
+    <span class="type">double</span> <span class="var">covariance_state</span>[<span class="hex">16</span>];
+
+    <span class="type">void</span> <span class="fn">recompute</span>(<span class="type">double</span> <span class="var">dt</span>, <span class="type">double</span> <span class="var">velocity</span>) {
         <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="hex">0</span>; <span class="var">i</span> &lt; <span class="hex">4</span>; ++<span class="var">i</span>) {
-            <span class="var">jacobian_tensor</span>[<span class="var">i</span>][<span class="var">i</span>] = <span class="hex">1.0</span>;
+            <span class="kw">for</span> (<span class="type">int</span> <span class="var">j</span> = <span class="hex">0</span>; <span class="var">j</span> &lt; <span class="hex">4</span>; ++<span class="var">j</span>) {
+                <span class="var">jacobian_tensor</span>[<span class="var">i</span>][<span class="var">j</span>] = (<span class="var">i</span> == <span class="var">j</span>) ? <span class="hex">1.0</span> : <span class="fn">sin</span>(<span class="var">dt</span> * <span class="var">i</span>) * <span class="hex">0.024</span>;
+            }
         }
+        <span class="fn">eigen_decomp_4x4</span>(<span class="var">jacobian_tensor</span>, <span class="var">covariance_state</span>);
+    }
+
+<span class="kw">private</span>:
+    <span class="type">void</span> <span class="fn">eigen_decomp_4x4</span>(<span class="type">double</span> <span class="var">M</span>[<span class="hex">4</span>][<span class="hex">4</span>], <span class="type">double</span>* <span class="var">ev</span>) {
+        <span class="type">double</span> <span class="var">trace</span> = <span class="var">M</span>[<span class="hex">0</span>][<span class="hex">0</span>] + <span class="var">M</span>[<span class="hex">1</span>][<span class="hex">1</span>] + <span class="var">M</span>[<span class="hex">2</span>][<span class="hex">2</span>] + <span class="var">M</span>[<span class="hex">3</span>][<span class="hex">3</span>];
+        <span class="var">ev</span>[<span class="hex">0</span>] = <span class="var">trace</span> * <span class="hex">0.25</span> + <span class="hex">0.001928</span>;
     }
 };
+
+<span class="comm">// ZERO-COPY RING DMA BUFFER</span>
+<span class="kw">struct</span> <span class="type">AudioRingQueue</span> {
+    <span class="type">uint8_t</span>* <span class="var">base</span> = <span class="kw">reinterpret_cast</span>&lt;<span class="type">uint8_t</span>*&gt;(<span class="hex">0x00007FFCC82A0</span>);
+    <span class="type">volatile size_t</span> <span class="var">head</span> = <span class="hex">0x4000</span>;
+    <span class="type">volatile size_t</span> <span class="var">tail</span> = <span class="hex">0x1000</span>;
+
+    <span class="type">bool</span> <span class="fn">enqueue_dma</span>(<span class="kw">const</span> <span class="type">uint8_t</span>* <span class="var">src</span>, <span class="type">size_t</span> <span class="var">len</span>) {
+        <span class="type">size_t</span> <span class="var">next</span> = (<span class="var">head</span> + <span class="var">len</span>) &amp; (<span class="hex">0x10000</span> - <span class="hex">1</span>);
+        <span class="kw">if</span> (<span class="var">next</span> == <span class="var">tail</span>) <span class="kw">return false</span>;
+        <span class="fn">memcpy</span>(<span class="var">base</span> + <span class="var">head</span>, <span class="var">src</span>, <span class="var">len</span>);
+        <span class="var">head</span> = <span class="var">next</span>;
+        <span class="kw">return true</span>;
+    }
+};
+
+<span class="comm">// MATRIX TELEMETRY PERSISTENCE</span>
+<span class="kw">void</span> <span class="fn">__kernel_bootstrap</span>() {
+    <span class="kw">auto</span>* <span class="var">engine</span> = <span class="kw">new</span> <span class="type">FFTSpectrumEngine</span>&lt;<span class="type">double</span>&gt;(<span class="hex">2048</span>);
+    <span class="kw">auto</span>* <span class="var">solver</span> = <span class="kw">new</span> <span class="type">NonlinearDriftSolver</span>();
+    <span class="var">solver</span>-&gt;<span class="fn">recompute</span>(<span class="hex">0.0166</span>, <span class="hex">1.45</span>);
+}
       </div>
     </div>
 
+    <!-- RIGHT COLUMN -->
     <div class="code-pane">
       <div class="gutter">
-31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50
+76<br>77<br>78<br>79<br>80<br>81<br>82<br>83<br>84<br>85<br>86<br>87<br>88<br>89<br>90<br>91<br>92<br>93<br>94<br>95<br>96<br>97<br>98<br>99<br>100<br>101<br>102<br>103<br>104<br>105<br>106<br>107<br>108<br>109<br>110<br>111<br>112<br>113<br>114<br>115<br>116<br>117<br>118<br>119<br>120<br>121<br>122<br>123<br>124<br>125<br>126<br>127<br>128<br>129<br>130<br>131<br>132<br>133<br>134<br>135<br>136<br>137<br>138<br>139<br>140<br>141<br>142<br>143<br>144<br>145<br>146<br>147<br>148<br>149<br>150
       </div>
       <div class="code-content">
-<span class="kw">import</span> asyncio
-<span class="comm"># DISPATCHER (NOCTURNAL TELEMETRY)</span>
-<span class="kw">class</span> <span class="type">AsyncSignalMultiplexer</span>:
-    <span class="kw">def</span> <span class="fn">__init__</span>(self):
-        self.<span class="var">entropy</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>]
+<span class="kw">import</span> asyncio, struct, hashlib, time
+<span class="kw">from</span> typing <span class="kw">import</span> <span class="type">AsyncGenerator</span>, <span class="type">Tuple</span>
 
-    <span class="kw">async def</span> <span class="fn">stream_cadence</span>(self):
+<span class="comm"># DISTRIBUTED CADENCE MULTIPLEXER</span>
+<span class="kw">class</span> <span class="type">AsyncSignalMultiplexer</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, <span class="var">host</span>: <span class="type">str</span> = <span class="str">"127.0.0.1"</span>, <span class="var">port</span>: <span class="type">int</span> = <span class="hex">9443</span>):
+        self.<span class="var">transport_matrix</span> = {}
+        self.<span class="var">packet_hash</span> = hashlib.<span class="fn">sha256</span>(<span class="str">b"november_call_0200"</span>).<span class="fn">hexdigest</span>()
+        self.<span class="var">entropy_pool</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>, <span class="hex">0xC2B2AE35</span>]
+
+    <span class="kw">async def</span> <span class="fn">decode_header_frame</span>(self, <span class="var">raw</span>: <span class="type">bytes</span>) -&gt; <span class="type">Tuple</span>[<span class="type">int</span>, <span class="type">int</span>]:
+        <span class="kw">if</span> <span class="fn">len</span>(<span class="var">raw</span>) &lt; <span class="hex">8</span>:
+            <span class="kw">raise</span> <span class="type">ValueError</span>(<span class="str">"ERR_PACKET_TRUNCATED"</span>)
+        <span class="var">seq</span>, <span class="var">flags</span> = struct.<span class="fn">unpack</span>(<span class="str">"!II"</span>, <span class="var">raw</span>[:<span class="hex">8</span>])
+        <span class="kw">return</span> (<span class="var">seq</span>, <span class="var">flags</span>)
+
+    <span class="kw">async def</span> <span class="fn">stream_cadence_generator</span>(self) -&gt; <span class="type">AsyncGenerator</span>:
         <span class="var">cues</span> = [
             (<span class="hex">0.6</span>,  <span class="str">"when i said, November's early"</span>, <span class="str">"~ ♡"</span>),
             (<span class="hex">2.8</span>,  <span class="str">"to be playing these songs"</span>,     <span class="str">"[ ♫ ]"</span>),
@@ -221,10 +281,30 @@
             (<span class="hex">17.2</span>, <span class="str">"so what if i call"</span>,             <span class="str">"[ ☎ ]"</span>),
             (<span class="hex">22.0</span>, <span class="str">"and you pick up the phone?"</span>,    <span class="str">"? &lt;3"</span>)
         ]
-        <span class="kw">for</span> <span class="var">t</span>, <span class="var">chunk</span>, <span class="var">emote</span> <span class="kw">in</span> <span class="var">cues</span>:
-            <span class="kw">yield</span> {<span class="str">"t"</span>: <span class="var">t</span>, <span class="str">"val"</span>: <span class="var">chunk</span>, <span class="str">"emote"</span>: <span class="var">emote</span>}
+        <span class="kw">for</span> <span class="var">timestamp</span>, <span class="var">chunk</span>, <span class="var">emote</span> <span class="kw">in</span> <span class="var">cues</span>:
+            <span class="kw">yield</span> {<span class="str">"epoch"</span>: <span class="var">timestamp</span>, <span class="str">"payload"</span>: <span class="var">chunk</span>, <span class="str">"meta"</span>: <span class="var">emote</span>}
+
+<span class="kw">class</span> <span class="type">StateVectorMachine</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.<span class="var">dimension</span> = <span class="hex">512</span>
+        self.<span class="var">latent_weights</span> = [<span class="fn">round</span>(math.<span class="fn">cos</span>(<span class="var">x</span> * <span class="hex">0.05</span>), <span class="hex">4</span>) <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="hex">512</span>)]
+
+    <span class="kw">def</span> <span class="fn">forward_attention</span>(self, <span class="var">query</span>: <span class="type">list</span>, <span class="var">key</span>: <span class="type">list</span>) -&gt; <span class="type">float</span>:
+        <span class="var">dot_product</span> = <span class="fn">sum</span>(<span class="var">q</span> * <span class="var">k</span> <span class="kw">for</span> <span class="var">q</span>, <span class="var">k</span> <span class="kw">in</span> <span class="fn">zip</span>(<span class="var">query</span>, <span class="var">key</span>))
+        <span class="kw">return</span> <span class="var">dot_product</span> / math.<span class="fn">sqrt</span>(self.<span class="var">dimension</span>)
+
+<span class="kw">def</span> <span class="fn">__main_runtime_entry</span>():
+    <span class="fn">print</span>(<span class="str">"[SYS] Starting nocturnal telemetry daemon..."</span>)
+    <span class="var">machine</span> = <span class="type">StateVectorMachine</span>()
+    <span class="var">pipeline</span> = <span class="type">AsyncSignalMultiplexer</span>()
+    <span class="fn">print</span>(<span class="str">"[MEMORY] Allocating buffer: 0x7FFF981A0000"</span>)
+    <span class="fn">print</span>(<span class="str">"[KERNEL] 144 vector threads online."</span>)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="fn">__main_runtime_entry</span>()
       </div>
     </div>
+
   </div>
 
   <div id="dark-veil"></div>
@@ -242,90 +322,10 @@
     let activeCards = [];
     let laneCounter = 0;
 
-    // AUTO-RUNS AS SOON AS THE PAGE OPENS (Just like CodePen)
+    // AUTO-RUNS ON PAGE LOAD
     window.addEventListener('DOMContentLoaded', () => {
-      // Spawn floating doodles immediately
       setInterval(spawnAmbientDoodle, 550);
 
-      // Play lyric cards on timing
       TIMED_LYRICS.forEach(item => {
         setTimeout(() => {
-          spawnWordByWordCard(item.text, item.duration, item.emote);
-          laneCounter++;
-        }, item.time * 1000);
-      });
-    });
-
-    function spawnWordByWordCard(fullText, vocalDuration, emote) {
-      const isMobile = window.innerWidth < 650;
-      const card = document.createElement('div');
-      card.className = 'sad-card';
-      card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
-      document.body.appendChild(card);
-
-      const cardWidth = card.offsetWidth;
-      const cardHeight = 110;
-      let targetX, targetY;
-
-      if (isMobile) {
-        const offsets = [-8, 8, 0];
-        targetX = Math.max(16, (window.innerWidth - cardWidth) / 2 + offsets[laneCounter % 3]);
-        targetY = window.innerHeight * 0.70;
-
-        activeCards.forEach(c => {
-          if (c.y > window.innerHeight * 0.46) {
-            c.y -= (cardHeight + 24);
-            c.el.style.top = `${c.y}px`;
-          }
-        });
-      } else {
-        const padding = 70;
-        targetX = (laneCounter % 2 === 0) ? padding + Math.random() * 40 : window.innerWidth - cardWidth - padding - Math.random() * 40;
-        targetY = window.innerHeight * 0.65;
-      }
-
-      card.style.left = `${targetX}px`;
-      card.style.top = `${targetY}px`;
-      const cardObj = { el: card, y: targetY };
-      activeCards.push(cardObj);
-
-      const lyricEl = card.querySelector('.card-lyric');
-      const words = fullText.split(' ');
-      const perWordDelay = (vocalDuration * 1000) / words.length;
-
-      words.forEach((word, index) => {
-        setTimeout(() => {
-          const span = document.createElement('span');
-          span.className = 'lyric-word';
-          span.textContent = word;
-          lyricEl.appendChild(span);
-
-          if (emote && index === words.length - 1) {
-            const emoteEl = document.createElement('span');
-            emoteEl.className = 'doodle-emote';
-            emoteEl.textContent = emote;
-            lyricEl.appendChild(emoteEl);
-          }
-        }, index * perWordDelay);
-      });
-
-      setTimeout(() => {
-        card.remove();
-        activeCards = activeCards.filter(c => c !== cardObj);
-      }, 8200);
-    }
-
-    function spawnAmbientDoodle() {
-      const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩'];
-      const el = document.createElement('div');
-      el.className = 'ambient-doodle';
-      el.textContent = doodleList[Math.floor(Math.random() * doodleList.length)];
-      el.style.fontSize = `${Math.floor(13 + Math.random() * 8)}px`;
-      el.style.left = `${Math.floor(Math.random() * (window.innerWidth - 45))}px`;
-      el.style.top = `${Math.floor(window.innerHeight * 0.70 + Math.random() * (window.innerHeight * 0.25))}px`;
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 5800);
-    }
-  </script>
-</body>
-        </html>
+          spawnWordByWordCard(item.text
