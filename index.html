@@ -76,50 +76,88 @@
     }
 
     /* ==========================================================
-       2. LARGER SAD CARD (ONE SIDE + MULTI-ANGLE DRIFT)
+       2. EXTRA-LARGE SAD CARD (SINGLE CARD ONLY)
        ========================================================== */
     .sad-card {
       position: fixed;
-      /* BIGGER DIMENSIONS */
-      width: min(90vw, 420px);
-      min-height: 135px;
-      padding: 24px 28px;
-      background: linear-gradient(150deg, rgba(21, 29, 42, 0.95) 0%, rgba(9, 14, 23, 0.97) 100%);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(176, 196, 222, 0.38);
-      border-radius: 14px;
+      /* EXTRA LARGE DIMENSIONS */
+      width: min(92vw, 520px);
+      min-height: 150px;
+      padding: 28px 34px;
+      background: linear-gradient(150deg, rgba(21, 29, 42, 0.95) 0%, rgba(9, 14, 23, 0.98) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(176, 196, 222, 0.4);
+      border-radius: 16px;
       box-shadow: 
-        0 20px 42px rgba(0, 0, 0, 0.9),
-        0 6px 22px rgba(30, 58, 95, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        0 24px 50px rgba(0, 0, 0, 0.92),
+        0 8px 24px rgba(30, 58, 95, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
       z-index: 9999;
       pointer-events: none;
-      
-      /* Multi-angle dynamic float lifecycle */
-      animation: cardLifecycle 8.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: transform, opacity;
     }
 
     .sad-card::before {
-      content: ''; position: absolute; inset: 6px;
-      border: 1px solid rgba(176, 196, 222, 0.16); border-radius: 9px; pointer-events: none;
+      content: ''; position: absolute; inset: 7px;
+      border: 1px solid rgba(176, 196, 222, 0.18); border-radius: 11px; pointer-events: none;
+    }
+
+    /* Enters from Left */
+    .from-left {
+      animation: enterLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes enterLeft {
+      0% {
+        opacity: 0;
+        transform: translate3d(-70px, 0, 0) scale(0.92) rotate(-2.5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(-1deg);
+      }
+    }
+
+    /* Enters from Right */
+    .from-right {
+      animation: enterRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes enterRight {
+      0% {
+        opacity: 0;
+        transform: translate3d(70px, 0, 0) scale(0.92) rotate(2.5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(1deg);
+      }
+    }
+
+    /* Smooth Dissolve Exit for the Previous Card */
+    .sad-card.exiting {
+      animation: exitDissolve 0.35s ease forwards !important;
+    }
+    @keyframes exitDissolve {
+      to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
     }
 
     .card-meta {
       font-family: 'Courier New', monospace; 
-      font-size: 11px; 
+      font-size: 11.5px; 
       letter-spacing: 0.18em;
       text-transform: uppercase; 
       color: rgba(176, 196, 222, 0.65); 
       text-align: center; 
-      margin-bottom: 9px;
+      margin-bottom: 12px;
     }
 
     .card-lyric {
       color: #edf2f7; 
-      font-size: 19px; /* BIGGER, CLEARER TEXT */
-      font-weight: 550; 
+      font-size: clamp(20px, 2.5vw, 25px); /* EXTRA LARGE BOLD TEXT */
+      font-weight: 600; 
       line-height: 1.5;
       letter-spacing: -0.015em; 
       text-align: center; 
@@ -129,22 +167,22 @@
     .lyric-word {
       display: inline-block;
       opacity: 0;
-      transform: translateY(5px);
-      animation: wordReveal 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      margin: 0 3px;
+      transform: translateY(6px);
+      animation: wordReveal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      margin: 0 4px;
     }
     @keyframes wordReveal { to { opacity: 1; transform: translateY(0); } }
 
     .doodle-emote {
       display: inline-block;
-      margin-left: 8px;
+      margin-left: 10px;
       font-family: 'Courier New', monospace;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       color: #90cdf4;
       border: 1px solid rgba(144, 205, 244, 0.4);
-      padding: 2px 7px;
-      border-radius: 7px;
+      padding: 3px 9px;
+      border-radius: 8px;
       background: rgba(144, 205, 244, 0.1);
       letter-spacing: 0.05em;
       animation: gentlePulse 1.4s ease infinite;
@@ -153,27 +191,6 @@
     @keyframes gentlePulse {
       0%, 100% { opacity: 0.75; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.06); }
-    }
-
-    /* DYNAMIC MULTI-ANGLE FLOAT KEYFRAME */
-    @keyframes cardLifecycle {
-      0% {
-        opacity: 0;
-        /* Enters from a diagonal angle based on --start-dx and --rot */
-        transform: translate3d(var(--start-dx, 0px), 40px, 0) scale(0.9) rotate(calc(var(--rot, 0deg) * 1.4));
-      }
-      7% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(var(--rot, 0deg));
-      }
-      75% {
-        opacity: 1;
-        transform: translate3d(calc(var(--start-dx, 0px) * -0.4), -370px, 0) scale(1) rotate(var(--rot, 0deg));
-      }
-      100% {
-        opacity: 0;
-        transform: translate3d(calc(var(--start-dx, 0px) * -0.8), -480px, 0) scale(0.94) rotate(calc(var(--rot, 0deg) * 0.8));
-      }
     }
 
     /* Ambient Drawing Doodles */
@@ -255,7 +272,7 @@
       }
     }
 
-    // 2. TIMED LYRICS ENGINE
+    // 2. TIMED LYRICS (LEFT, RIGHT, LEFT, RIGHT...)
     const TIMED_LYRICS = [
       { time: 0.6,  text: "when i said, November's early", duration: 1.8, emote: "~ ♡" },
       { time: 2.8,  text: "to be playing these songs",     duration: 1.9, emote: "[ ♫ ]" },
@@ -265,17 +282,27 @@
       { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3" }
     ];
 
-    let activeCards = [];
-    let cardCount = 0;
+    let currentCard = null; // GUARANTEES ONLY ONE BOX ON SCREEN
+    let lineIndex = 0;
 
     function playLoop() {
-      TIMED_LYRICS.forEach(item => {
+      TIMED_LYRICS.forEach((item, idx) => {
         setTimeout(() => {
-          spawnWordByWordCard(item.text, item.duration, item.emote);
-          cardCount++;
+          // Alternates: even index = LEFT, odd index = RIGHT
+          const direction = (idx % 2 === 0) ? 'left' : 'right';
+          spawnSingleCard(item.text, item.duration, item.emote, direction);
         }, item.time * 1000);
       });
-      setTimeout(playLoop, 28000); // Loops continuously
+
+      // Clear the last card cleanly after the song ends, then loop
+      setTimeout(() => {
+        if (currentCard) {
+          currentCard.classList.add('exiting');
+          setTimeout(() => { currentCard?.remove(); currentCard = null; }, 350);
+        }
+      }, 26500);
+
+      setTimeout(playLoop, 28000);
     }
 
     function init() {
@@ -292,52 +319,54 @@
     }
     window.addEventListener('resize', fillCodeBackground);
 
-    function spawnWordByWordCard(fullText, vocalDuration, emote) {
+    // SPAWNS ONLY ONE CARD (DISSOLVES PREVIOUS CARD)
+    function spawnSingleCard(fullText, vocalDuration, emote, side) {
+      // 1. Remove previous card cleanly so only ONE box exists
+      if (currentCard) {
+        const oldCard = currentCard;
+        oldCard.classList.add('exiting');
+        setTimeout(() => oldCard.remove(), 350);
+      }
+
+      // 2. Create the new big card
       const card = document.createElement('div');
-      card.className = 'sad-card';
+      card.className = `sad-card ${side === 'left' ? 'from-left' : 'from-right'}`;
       card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
-
-      // --- DIFFERENT ENTRANCE ANGLE & TILT FOR EVERY CARD ---
-      // Alternates natural angles: -3.5° to +3.8°
-      const angleSign = (cardCount % 2 === 0) ? 1 : -1;
-      const tiltAngle = angleSign * (1.8 + (Math.random() * 2.0));
-      // Varied horizontal entry angle offset
-      const startAngleDx = ((cardCount % 3) - 1) * 28;
-
-      card.style.setProperty('--rot', `${tiltAngle}deg`);
-      card.style.setProperty('--start-dx', `${startAngleDx}px`);
-
       document.body.appendChild(card);
+      currentCard = card;
 
-      const cardWidth = card.offsetWidth || 380;
+      const cardWidth = card.offsetWidth || 500;
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
       let targetX, targetY;
 
-      // --- ANCHORED TO ONE SIDE ONLY (RIGHT SIDE) ---
-      if (screenW < 700) {
-        // Mobile screen: comfortable centered-right placement
+      // 3. Position: Alternating LEFT and RIGHT sides
+      if (screenW < 750) {
+        // Mobile screen: slide in from left/right to center
         targetX = Math.max(16, (screenW - cardWidth) / 2);
-        targetY = screenH * 0.68;
+        targetY = screenH * 0.58;
       } else {
-        // iPad / Large Screen: Anchored to the RIGHT SIDE with margin
-        const rightMargin = Math.max(30, screenW * 0.08);
-        targetX = screenW - cardWidth - rightMargin;
-        targetY = screenH * 0.64;
+        // iPad / Large Screen: Anchored to LEFT or RIGHT with margin
+        const sideMargin = Math.max(40, screenW * 0.08);
+        if (side === 'left') {
+          targetX = sideMargin;
+        } else {
+          targetX = screenW - cardWidth - sideMargin;
+        }
+        targetY = screenH * 0.55;
       }
 
       card.style.left = `${targetX}px`;
       card.style.top = `${targetY}px`;
-      const cardObj = { el: card, y: targetY };
-      activeCards.push(cardObj);
 
-      // Word-by-Word Engine
+      // 4. Word-by-Word Engine
       const lyricEl = card.querySelector('.card-lyric');
       const words = fullText.split(' ');
       const perWordDelay = (vocalDuration * 1000) / words.length;
 
       words.forEach((word, index) => {
         setTimeout(() => {
+          if (!card.parentNode) return; // Prevent writing if card was removed
           const span = document.createElement('span');
           span.className = 'lyric-word';
           span.textContent = word;
@@ -351,12 +380,6 @@
           }
         }, index * perWordDelay);
       });
-
-      // Cleanup
-      setTimeout(() => {
-        card.remove();
-        activeCards = activeCards.filter(c => c !== cardObj);
-      }, 8500);
     }
 
     function spawnAmbientDoodle() {
