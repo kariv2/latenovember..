@@ -11,15 +11,13 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background-color: #06080d;
+      background-color: #05070c;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* ==========================================================
-       1. 100% SCREEN-FILLED IPAD CODE ENGINE (3 DENSE COLUMNS)
-       ========================================================== */
+    /* 1. 100% FULL-SCREEN FILLED CODE VIEWPORT */
     #code-viewport {
       position: fixed;
       top: 0; left: 0;
@@ -27,9 +25,8 @@
       background-color: #05070c;
       display: flex;
       font-family: 'Consolas', 'Courier New', monospace;
-      /* Micro font calibrated to fit every corner of iPad & Phone */
-      font-size: clamp(6px, 1.1vw, 7.8px);
-      line-height: 1.22;
+      font-size: clamp(6.2px, 1.1vw, 8px);
+      line-height: 1.25;
       letter-spacing: -0.01em;
       z-index: 0;
       opacity: 0.85;
@@ -62,7 +59,7 @@
       overflow: hidden;
     }
 
-    /* Vibrant Code Highlight Colors */
+    /* Syntax Highlighting */
     .kw { color: #f47067; font-weight: bold; }
     .fn { color: #dcbdfb; }
     .str { color: #96d0ff; }
@@ -71,7 +68,7 @@
     .comm { color: #384252; font-style: italic; }
     .var { color: #adbac7; }
 
-    /* Dark Vignette Layer */
+    /* Dark Vignette Overlay */
     #dark-veil {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -80,9 +77,7 @@
       pointer-events: none;
     }
 
-    /* ==========================================================
-       2. IPAD-COMPLIANT UNIFIED CARD ANIMATION (NO CRASHES)
-       ========================================================== */
+    /* 2. LYRIC CARDS (UNIFIED IPAD-SAFE ANIMATION) */
     .sad-card {
       position: fixed;
       width: min(88vw, 320px);
@@ -99,8 +94,6 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
       z-index: 9999;
       pointer-events: none;
-      
-      /* Single unified keyframe: guaranteed to never get stuck on opacity:0 */
       animation: cardLifecycle 8.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: transform, opacity;
     }
@@ -149,24 +142,11 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Unified Float Timeline */
     @keyframes cardLifecycle {
-      0% {
-        opacity: 0;
-        transform: translateY(22px) scale(0.92);
-      }
-      5% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      75% {
-        opacity: 1;
-        transform: translateY(-360px) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-460px) scale(0.95);
-      }
+      0% { opacity: 0; transform: translateY(22px) scale(0.92); }
+      6% { opacity: 1; transform: translateY(0) scale(1); }
+      75% { opacity: 1; transform: translateY(-360px) scale(1); }
+      100% { opacity: 0; transform: translateY(-460px) scale(0.95); }
     }
 
     /* Ambient Drawing Doodles */
@@ -193,139 +173,173 @@
 </head>
 <body>
 
-  <!-- ============================================================== -->
-  <!-- 3 ULTRA-DENSE PANES (COVERS 100% OF IPAD SCREEN IN ALL MODES)  -->
-  <!-- ============================================================== -->
-  <div id="code-viewport">
-    
-    <!-- COLUMN 1: Fast Fourier Transform & Vector Math -->
-    <div class="code-pane">
-      <div class="gutter">
-1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>71<br>72<br>73<br>74<br>75<br>76<br>77<br>78<br>79<br>80
-      </div>
-      <div class="code-content">
-<span class="kw">#include</span> <span class="str">&lt;immintrin.h&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;complex&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+  <!-- Dynamic code viewport -->
+  <div id="code-viewport"></div>
+  <div id="dark-veil"></div>
 
-<span class="comm">// FAST FOURIER KERNEL (AVX-512)</span>
-<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">T</span>&gt;
-<span class="kw">struct</span> <span class="type">FFTSpectrumEngine</span> {
-    <span class="type">size_t</span> <span class="var">dim</span> = <span class="hex">4096</span>;
-    <span class="type">std::vector</span>&lt;<span class="type">std::complex</span>&lt;<span class="type">T</span>&gt;&gt; <span class="var">omega</span>;
-    <span class="type">uintptr_t</span> <span class="var">m_alloc</span> = <span class="hex">0x7FFE9B42A000</span>;
+  <script>
+    // 1. DYNAMICALLY FILLS 100% OF IPAD SCREEN (ZERO EMPTY SPACE)
+    function fillCodeBackground() {
+      const container = document.getElementById('code-viewport');
+      container.innerHTML = '';
+      
+      const snippets = [
+        '<span class="kw">#include</span> <span class="str">&lt;immintrin.h&gt;</span>',
+        '<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">Scalar</span>&gt;',
+        '<span class="kw">struct</span> <span class="type">FFTSpectrumEngine</span> {',
+        '    <span class="type">size_t</span> <span class="var">dim</span> = <span class="hex">4096</span>;',
+        '    <span class="type">uintptr_t</span> <span class="var">alloc_ptr</span> = <span class="hex">0x7FFE9B42A000</span>;',
+        '    <span class="fn">execute_butterfly</span>(<span class="var">a</span>, <span class="var">stride</span>);',
+        '    __m512d <span class="var">acc</span> = <span class="fn">_mm512_fmadd_pd</span>(<span class="var">r</span>, <span class="var">i</span>, <span class="var">r</span>);',
+        '};',
+        '<span class="comm">// HESSIAN DRIFT EIGEN ACCUMULATOR</span>',
+        '<span class="kw">class</span> <span class="type">NonlinearDriftSolver</span> {',
+        '    <span class="type">double</span> <span class="var">jacobian_tensor</span>[<span class="hex">4</span>][<span class="hex">4</span>];',
+        '    <span class="fn">eigen_decomp_4x4</span>(<span class="var">jacobian_tensor</span>);',
+        '};',
+        '<span class="kw">async def</span> <span class="fn">stream_cadence</span>(self) -&gt; <span class="type">AsyncGen</span>:',
+        '    <span class="var">cues</span> = [(<span class="hex">0.6</span>, <span class="str">"November"</span>), (<span class="hex">17.2</span>, <span class="str">"call"</span>)]',
+        '    <span class="kw">yield</span> {<span class="str">"epoch"</span>: <span class="var">t</span>, <span class="str">"hash"</span>: <span class="hex">0x9E3779B9</span>}',
+        '<span class="kw">__global__ void</span> <span class="fn">VectorKernel</span>(<span class="type">float</span>* <span class="var">d_out</span>) {',
+        '    <span class="type">int</span> <span class="var">idx</span> = blockIdx.x * blockDim.x + threadIdx.x;',
+        '    <span class="var">d_out</span>[<span class="var">idx</span>] = <span class="fn">__fmul_rn</span>(<span class="var">val</span>, <span class="hex">0.9984f</span>);',
+        '}'
+      ];
 
-    <span class="fn">FFTSpectrumEngine</span>(<span class="type">size_t</span> <span class="var">n</span>) : <span class="var">dim</span>(<span class="var">n</span>) {
-        <span class="var">omega</span>.<span class="fn">resize</span>(<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>);
-        <span class="kw">for</span> (<span class="type">size_t</span> <span class="var">k</span> = <span class="hex">0</span>; <span class="var">k</span> &lt; (<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>); ++<span class="var">k</span>) {
-            <span class="type">T</span> <span class="var">th</span> = -<span class="hex">2.0</span> * <span class="hex">3.14159265</span> * <span class="var">k</span> / <span class="var">dim</span>;
-            <span class="var">omega</span>[<span class="var">k</span>] = <span class="type">std::complex</span>&lt;<span class="type">T</span>&gt;(<span class="fn">cos</span>(<span class="var">th</span>), <span class="fn">sin</span>(<span class="var">th</span>));
+      const cols = window.innerWidth > 800 ? 3 : 2;
+      // Calculates exact line count so the bottom of iPad is never empty
+      const linesNeeded = Math.ceil(window.innerHeight / 10) + 12;
+
+      let lineCounter = 1;
+      for (let c = 0; c < cols; c++) {
+        const pane = document.createElement('div');
+        pane.className = 'code-pane';
+        
+        let gutterHtml = '';
+        let codeHtml = '';
+        
+        for (let l = 0; l < linesNeeded; l++) {
+          gutterHtml += `${lineCounter}<br>`;
+          codeHtml += snippets[(l + c * 6) % snippets.length] + '<br>';
+          lineCounter++;
         }
+        
+        pane.innerHTML = `<div class="gutter">${gutterHtml}</div><div class="code-content">${codeHtml}</div>`;
+        container.appendChild(pane);
+      }
     }
 
-    <span class="kw">inline void</span> <span class="fn">butterfly</span>(<span class="type">std::complex</span>&lt;<span class="type">T</span>&gt;* <span class="var">a</span>, <span class="type">size_t</span> <span class="var">s</span>) {
-        __m512d <span class="var">r</span> = <span class="fn">_mm512_loadu_pd</span>(&amp;<span class="var">a</span>[<span class="hex">0</span>]);
-        __m512d <span class="var">i</span> = <span class="fn">_mm512_loadu_pd</span>(&amp;<span class="var">a</span>[<span class="var">s</span>]);
-        __m512d <span class="var">acc</span> = <span class="fn">_mm512_fmadd_pd</span>(<span class="var">r</span>, <span class="var">i</span>, <span class="var">r</span>);
-        <span class="fn">_mm512_storeu_pd</span>(&amp;<span class="var">a</span>[<span class="hex">0</span>], <span class="var">acc</span>);
+    // 2. TIMED LYRICS ENGINE
+    const TIMED_LYRICS = [
+      { time: 0.6,  text: "when i said, November's early", duration: 1.8, emote: "~ ♡" },
+      { time: 2.8,  text: "to be playing these songs",     duration: 1.9, emote: "[ ♫ ]" },
+      { time: 10.2, text: "now when i look back",          duration: 1.6, emote: "( . . )" },
+      { time: 12.4, text: "i can see i was wrong",         duration: 1.8, emote: "</3" },
+      { time: 17.2, text: "so what if i call",             duration: 2.4, emote: "[ ☎ ]" },
+      { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3" }
+    ];
+
+    let activeCards = [];
+    let laneCounter = 0;
+
+    function playLoop() {
+      TIMED_LYRICS.forEach(item => {
+        setTimeout(() => {
+          spawnWordByWordCard(item.text, item.duration, item.emote);
+          laneCounter++;
+        }, item.time * 1000);
+      });
+      setTimeout(playLoop, 28000); // Continuous loop
     }
-};
 
-<span class="comm">// EIGENVALUE SPATIAL SOLVER</span>
-<span class="kw">class</span> <span class="type">NonlinearDriftSolver</span> {
-<span class="kw">public</span>:
-    <span class="type">double</span> <span class="var">jacobian</span>[<span class="hex">4</span>][<span class="hex">4</span>];
-    <span class="type">double</span> <span class="var">cov_state</span>[<span class="hex">16</span>];
-
-    <span class="type">void</span> <span class="fn">recompute</span>(<span class="type">double</span> <span class="var">dt</span>) {
-        <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="hex">0</span>; <span class="var">i</span> &lt; <span class="hex">4</span>; ++<span class="var">i</span>) {
-            <span class="kw">for</span> (<span class="type">int</span> <span class="var">j</span> = <span class="hex">0</span>; <span class="var">j</span> &lt; <span class="hex">4</span>; ++<span class="var">j</span>) {
-                <span class="var">jacobian</span>[<span class="var">i</span>][<span class="var">j</span>] = (<span class="var">i</span> == <span class="var">j</span>) ? <span class="hex">1.0</span> : <span class="fn">sin</span>(<span class="var">dt</span> * <span class="var">i</span>) * <span class="hex">0.024</span>;
-            }
-        }
-        <span class="fn">decomp_4x4</span>(<span class="var">jacobian</span>, <span class="var">cov_state</span>);
+    function init() {
+      fillCodeBackground();
+      setInterval(spawnAmbientDoodle, 500);
+      playLoop();
     }
-<span class="kw">private</span>:
-    <span class="type">void</span> <span class="fn">decomp_4x4</span>(<span class="type">double</span> <span class="var">M</span>[<span class="hex">4</span>][<span class="hex">4</span>], <span class="type">double</span>* <span class="var">ev</span>) {
-        <span class="type">double</span> <span class="var">tr</span> = <span class="var">M</span>[<span class="hex">0</span>][<span class="hex">0</span>] + <span class="var">M</span>[<span class="hex">1</span>][<span class="hex">1</span>] + <span class="var">M</span>[<span class="hex">2</span>][<span class="hex">2</span>] + <span class="var">M</span>[<span class="hex">3</span>][<span class="hex">3</span>];
-        <span class="var">ev</span>[<span class="hex">0</span>] = <span class="var">tr</span> * <span class="hex">0.25</span> + <span class="hex">0.001928</span>;
+
+    // Runs immediately on page load
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      init();
+    } else {
+      document.addEventListener('DOMContentLoaded', init);
+      window.addEventListener('load', init);
     }
-};
+    window.addEventListener('resize', fillCodeBackground);
 
-<span class="comm">// ZERO-COPY DMA ALLOCATOR</span>
-<span class="kw">struct</span> <span class="type">AudioRingQueue</span> {
-    <span class="type">uint8_t</span>* <span class="var">base</span> = <span class="kw">reinterpret_cast</span>&lt;<span class="type">uint8_t</span>*&gt;(<span class="hex">0x00007FFCC82A0</span>);
-    <span class="type">volatile size_t</span> <span class="var">head</span> = <span class="hex">0x4000</span>;
-    <span class="type">volatile size_t</span> <span class="var">tail</span> = <span class="hex">0x1000</span>;
+    function spawnWordByWordCard(fullText, vocalDuration, emote) {
+      const card = document.createElement('div');
+      card.className = 'sad-card';
+      card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
+      document.body.appendChild(card);
 
-    <span class="type">bool</span> <span class="fn">enqueue</span>(<span class="kw">const</span> <span class="type">uint8_t</span>* <span class="var">src</span>, <span class="type">size_t</span> <span class="var">len</span>) {
-        <span class="type">size_t</span> <span class="var">nxt</span> = (<span class="var">head</span> + <span class="var">len</span>) &amp; (<span class="hex">0x10000</span> - <span class="hex">1</span>);
-        <span class="kw">if</span> (<span class="var">nxt</span> == <span class="var">tail</span>) <span class="kw">return false</span>;
-        <span class="fn">memcpy</span>(<span class="var">base</span> + <span class="var">head</span>, <span class="var">src</span>, <span class="var">len</span>);
-        <span class="var">head</span> = <span class="var">nxt</span>;
-        <span class="kw">return true</span>;
+      const cardWidth = card.offsetWidth || 300;
+      const cardHeight = card.offsetHeight || 110;
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      let targetX, targetY;
+
+      if (screenW < 700) {
+        const offsets = [-8, 8, 0];
+        targetX = Math.max(16, (screenW - cardWidth) / 2 + offsets[laneCounter % 3]);
+        targetY = screenH * 0.70;
+      } else {
+        const padding = screenW * 0.12;
+        targetX = (laneCounter % 2 === 0) 
+          ? padding + (Math.random() * 30) 
+          : (screenW - cardWidth - padding - (Math.random() * 30));
+        targetY = screenH * 0.62;
+      }
+
+      card.style.left = `${targetX}px`;
+      card.style.top = `${targetY}px`;
+      const cardObj = { el: card, y: targetY };
+      activeCards.push(cardObj);
+
+      const lyricEl = card.querySelector('.card-lyric');
+      const words = fullText.split(' ');
+      const perWordDelay = (vocalDuration * 1000) / words.length;
+
+      words.forEach((word, index) => {
+        setTimeout(() => {
+          const span = document.createElement('span');
+          span.className = 'lyric-word';
+          span.textContent = word;
+          lyricEl.appendChild(span);
+
+          if (emote && index === words.length - 1) {
+            const emoteEl = document.createElement('span');
+            emoteEl.className = 'doodle-emote';
+            emoteEl.textContent = emote;
+            lyricEl.appendChild(emoteEl);
+          }
+        }, index * perWordDelay);
+      });
+
+      setTimeout(() => {
+        card.remove();
+        activeCards = activeCards.filter(c => c !== cardObj);
+      }, 8500);
     }
-};
-      </div>
-    </div>
 
-    <!-- COLUMN 2: Asynchronous Sockets & Telemetry Dispatcher -->
-    <div class="code-pane">
-      <div class="gutter">
-81<br>82<br>83<br>84<br>85<br>86<br>87<br>88<br>89<br>90<br>91<br>92<br>93<br>94<br>95<br>96<br>97<br>98<br>99<br>100<br>101<br>102<br>103<br>104<br>105<br>106<br>107<br>108<br>109<br>110<br>111<br>112<br>113<br>114<br>115<br>116<br>117<br>118<br>119<br>120<br>121<br>122<br>123<br>124<br>125<br>126<br>127<br>128<br>129<br>130<br>131<br>132<br>133<br>134<br>135<br>136<br>137<br>138<br>139<br>140<br>141<br>142<br>143<br>144<br>145<br>146<br>147<br>148<br>149<br>150<br>151<br>152<br>153<br>154<br>155<br>156<br>157<br>158<br>159<br>160
-      </div>
-      <div class="code-content">
-<span class="kw">import</span> asyncio, struct, hashlib, math
-<span class="kw">from</span> typing <span class="kw">import</span> <span class="type">AsyncGenerator</span>, <span class="type">Tuple</span>
+    function spawnAmbientDoodle() {
+      const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩'];
+      const el = document.createElement('div');
+      el.className = 'ambient-doodle';
+      el.textContent = doodleList[Math.floor(Math.random() * doodleList.length)];
+      
+      const size = Math.floor(13 + Math.random() * 8);
+      el.style.fontSize = `${size}px`;
+      
+      const x = Math.floor(Math.random() * (window.innerWidth - 45));
+      const y = Math.floor(window.innerHeight * 0.72 + Math.random() * (window.innerHeight * 0.22));
 
-<span class="comm"># DISTRIBUTED CADENCE MULTIPLEXER</span>
-<span class="kw">class</span> <span class="type">AsyncSignalMultiplexer</span>:
-    <span class="kw">def</span> <span class="fn">__init__</span>(self, <span class="var">host</span>: <span class="type">str</span> = <span class="str">"127.0.0.1"</span>, <span class="var">port</span>: <span class="type">int</span> = <span class="hex">9443</span>):
-        self.<span class="var">hash</span> = hashlib.<span class="fn">sha256</span>(<span class="str">b"november_call_0200"</span>).<span class="fn">hexdigest</span>()
-        self.<span class="var">entropy</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>, <span class="hex">0xC2B2AE35</span>]
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      document.body.appendChild(el);
 
-    <span class="kw">async def</span> <span class="fn">decode_frame</span>(self, <span class="var">raw</span>: <span class="type">bytes</span>) -&gt; <span class="type">Tuple</span>[<span class="type">int</span>, <span class="type">int</span>]:
-        <span class="kw">if</span> <span class="fn">len</span>(<span class="var">raw</span>) &lt; <span class="hex">8</span>:
-            <span class="kw">raise</span> <span class="type">ValueError</span>(<span class="str">"ERR_PACKET_TRUNCATED"</span>)
-        <span class="var">seq</span>, <span class="var">flg</span> = struct.<span class="fn">unpack</span>(<span class="str">"!II"</span>, <span class="var">raw</span>[:<span class="hex">8</span>])
-        <span class="kw">return</span> (<span class="var">seq</span>, <span class="var">flg</span>)
-
-    <span class="kw">async def</span> <span class="fn">stream_cadence</span>(self) -&gt; <span class="type">AsyncGenerator</span>:
-        <span class="var">cues</span> = [
-            (<span class="hex">0.6</span>,  <span class="str">"when i said, November's early"</span>, <span class="str">"~ ♡"</span>),
-            (<span class="hex">2.8</span>,  <span class="str">"to be playing these songs"</span>,     <span class="str">"[ ♫ ]"</span>),
-            (<span class="hex">10.2</span>, <span class="str">"now when i look back"</span>,          <span class="str">"( . . )"</span>),
-            (<span class="hex">12.4</span>, <span class="str">"i can see i was wrong"</span>,         <span class="str">"&lt;/3"</span>),
-            (<span class="hex">17.2</span>, <span class="str">"so what if i call"</span>,             <span class="str">"[ ☎ ]"</span>),
-            (<span class="hex">22.0</span>, <span class="str">"and you pick up the phone?"</span>,    <span class="str">"? &lt;3"</span>)
-        ]
-        <span class="kw">for</span> <span class="var">ts</span>, <span class="var">chk</span>, <span class="var">em</span> <span class="kw">in</span> <span class="var">cues</span>:
-            <span class="kw">yield</span> {<span class="str">"epoch"</span>: <span class="var">ts</span>, <span class="str">"payload"</span>: <span class="var">chk</span>, <span class="str">"meta"</span>: <span class="var">em</span>}
-
-<span class="kw">class</span> <span class="type">StateVectorMachine</span>:
-    <span class="kw">def</span> <span class="fn">__init__</span>(self):
-        self.<span class="var">dim</span> = <span class="hex">512</span>
-        self.<span class="var">weights</span> = [<span class="fn">round</span>(math.<span class="fn">cos</span>(<span class="var">x</span> * <span class="hex">0.05</span>), <span class="hex">4</span>) <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="hex">512</span>)]
-
-    <span class="kw">def</span> <span class="fn">forward</span>(self, <span class="var">q</span>: <span class="type">list</span>, <span class="var">k</span>: <span class="type">list</span>) -&gt; <span class="type">float</span>:
-        <span class="var">dot</span> = <span class="fn">sum</span>(<span class="var">a</span> * <span class="var">b</span> <span class="kw">for</span> <span class="var">a</span>, <span class="var">b</span> <span class="kw">in</span> <span class="fn">zip</span>(<span class="var">q</span>, <span class="var">k</span>))
-        <span class="kw">return</span> <span class="var">dot</span> / math.<span class="fn">sqrt</span>(self.<span class="var">dim</span>)
-
-<span class="kw">def</span> <span class="fn">__runtime_entry</span>():
-    <span class="fn">print</span>(<span class="str">"[SYS] Starting nocturnal telemetry..."</span>)
-    <span class="var">svm</span> = <span class="type">StateVectorMachine</span>()
-    <span class="var">mux</span> = <span class="type">AsyncSignalMultiplexer</span>()
-    <span class="fn">print</span>(<span class="str">"[MEMORY] Allocating buffer: 0x7FFF981A0000"</span>)
-      </div>
-    </div>
-
-    <!-- COLUMN 3: Neural Latent Space & Pipeline Matrix -->
-    <div class="code-pane">
-      <div class="gutter">
-161<br>162<br>163<br>164<br>165<br>166<br>167<br>168<br>169<br>170<br>171<br>172<br>173<br>174<br>175<br>176<br>177<br>178<br>179<br>180<br>181<br>182<br>183<br>184<br>185<br>186<br>187<br>188<br>189<br>190<br>191<br>192<br>193<br>194<br>195<br>196<br>197<br>198<br>199<br>200<br>201<br>202<br>203<br>204<br>205<br>206<br>207<br>208<br>209<br>210<br>211<br>212<br>213<br>214<br>215<br>216<br>217<br>218<br>219<br>220<br>221<br>222<br>223<br>224<br>225<br>226<br>227<br>228<br>229<br>230<br>231<br>232<br>233<br>234<br>235<br>236<br>237<br>238<br>239<br>240
-      </div>
-      <div class="code-content">
-<span class="kw"># CUDA TENSOR GRADIENT DESCENT ENGINE</span>
-<span class="kw">__global__ void</span> <span class="fn">VectorTensorKernel</span>(<span class="type">float</span>* <span class="var">d_out</span>, <span class="kw">const</span> <span class="type">float</span>* <span class="var">d_in</span>, <span class="type">int</span> <span class="var">N</span>) {
-    <span class="type">int</span> <span class="var">idx</span> = blockIdx.x * blockDim.x + threadIdx.x;
-    <span class="kw">if</span> (
+      setTimeout(() => el.remove(), 5800);
+    }
+  </script>
+</body>
+</html>
