@@ -29,7 +29,7 @@
       line-height: 1.25;
       letter-spacing: -0.01em;
       z-index: 0;
-      opacity: 0.85;
+      opacity: 0.82;
       pointer-events: none;
       overflow: hidden;
     }
@@ -70,29 +70,30 @@
     #dark-veil {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at 50% 55%, rgba(6, 8, 13, 0.35) 0%, rgba(3, 4, 7, 0.84) 100%);
+      background: radial-gradient(circle at 50% 55%, rgba(6, 8, 13, 0.3) 0%, rgba(3, 4, 7, 0.85) 100%);
       z-index: 1;
       pointer-events: none;
     }
 
     /* ==========================================================
-       2. EXTRA-LARGE SAD CARD (SINGLE CARD ONLY)
+       2. EXTRA-LARGE SAD CARD (CONTINUOUS UPWARD FLOW)
        ========================================================== */
     .sad-card {
       position: fixed;
-      /* EXTRA LARGE DIMENSIONS */
       width: min(92vw, 520px);
       min-height: 150px;
       padding: 28px 34px;
-      background: linear-gradient(150deg, rgba(21, 29, 42, 0.95) 0%, rgba(9, 14, 23, 0.98) 100%);
+      background: linear-gradient(150deg, rgba(21, 29, 44, 0.96) 0%, rgba(8, 13, 21, 0.98) 100%);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(176, 196, 222, 0.4);
+      
+      /* Brighter, sharper glowing border */
+      border: 1.5px solid rgba(210, 230, 255, 0.55);
       border-radius: 16px;
       box-shadow: 
         0 24px 50px rgba(0, 0, 0, 0.92),
-        0 8px 24px rgba(30, 58, 95, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 0 30px rgba(144, 205, 244, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
       z-index: 9999;
       pointer-events: none;
       will-change: transform, opacity;
@@ -100,68 +101,84 @@
 
     .sad-card::before {
       content: ''; position: absolute; inset: 7px;
-      border: 1px solid rgba(176, 196, 222, 0.18); border-radius: 11px; pointer-events: none;
+      border: 1px solid rgba(210, 230, 255, 0.25); border-radius: 11px; pointer-events: none;
     }
 
-    /* Enters from Left */
+    /* Continuous Flow Upwards from Left */
     .from-left {
-      animation: enterLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: flowFromLeft 6.8s cubic-bezier(0.12, 0.85, 0.3, 1) forwards;
     }
-    @keyframes enterLeft {
+    @keyframes flowFromLeft {
       0% {
         opacity: 0;
-        transform: translate3d(-70px, 0, 0) scale(0.92) rotate(-2.5deg);
+        transform: translate3d(-70px, 45px, 0) scale(0.92) rotate(-3deg);
+      }
+      12% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(-1.2deg);
       }
       100% {
         opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(-1deg);
+        /* Keeps gliding smoothly upwards */
+        transform: translate3d(18px, -110px, 0) scale(1) rotate(-0.5deg);
       }
     }
 
-    /* Enters from Right */
+    /* Continuous Flow Upwards from Right */
     .from-right {
-      animation: enterRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: flowFromRight 6.8s cubic-bezier(0.12, 0.85, 0.3, 1) forwards;
     }
-    @keyframes enterRight {
+    @keyframes flowFromRight {
       0% {
         opacity: 0;
-        transform: translate3d(70px, 0, 0) scale(0.92) rotate(2.5deg);
+        transform: translate3d(70px, 45px, 0) scale(0.92) rotate(3deg);
+      }
+      12% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(1.2deg);
       }
       100% {
         opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(1deg);
+        /* Keeps gliding smoothly upwards */
+        transform: translate3d(-18px, -110px, 0) scale(1) rotate(0.5deg);
       }
     }
 
-    /* Smooth Dissolve Exit for the Previous Card */
+    /* Smooth Dissolve Exit continuing upward */
     .sad-card.exiting {
-      animation: exitDissolve 0.35s ease forwards !important;
+      animation: exitDissolve 0.35s ease-out forwards !important;
     }
     @keyframes exitDissolve {
       to {
         opacity: 0;
-        transform: translateY(-20px) scale(0.95);
+        transform: translateY(-145px) scale(0.94);
       }
     }
 
     .card-meta {
       font-family: 'Courier New', monospace; 
       font-size: 11.5px; 
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase; 
-      color: rgba(176, 196, 222, 0.65); 
+      color: rgba(210, 230, 255, 0.8); 
       text-align: center; 
       margin-bottom: 12px;
+      text-shadow: 0 0 10px rgba(144, 205, 244, 0.4);
     }
 
+    /* RADIANT BRIGHT LYRICS */
     .card-lyric {
-      color: #edf2f7; 
-      font-size: clamp(20px, 2.5vw, 25px); /* EXTRA LARGE BOLD TEXT */
-      font-weight: 600; 
+      color: #ffffff; /* Pure bright white */
+      font-size: clamp(20px, 2.5vw, 25px); 
+      font-weight: 650; 
       line-height: 1.5;
       letter-spacing: -0.015em; 
       text-align: center; 
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+      /* Brilliant illuminated white-blue bloom */
+      text-shadow: 
+        0 0 14px rgba(255, 255, 255, 0.85),
+        0 0 28px rgba(144, 205, 244, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.9);
     }
 
     .lyric-word {
@@ -179,39 +196,45 @@
       font-family: 'Courier New', monospace;
       font-size: 18px;
       font-weight: bold;
-      color: #90cdf4;
-      border: 1px solid rgba(144, 205, 244, 0.4);
+      color: #bce3ff;
+      border: 1.5px solid rgba(188, 227, 255, 0.6);
       padding: 3px 9px;
       border-radius: 8px;
-      background: rgba(144, 205, 244, 0.1);
+      background: rgba(144, 205, 244, 0.16);
       letter-spacing: 0.05em;
+      box-shadow: 0 0 14px rgba(188, 227, 255, 0.5);
       animation: gentlePulse 1.4s ease infinite;
       vertical-align: middle;
     }
     @keyframes gentlePulse {
-      0%, 100% { opacity: 0.75; transform: scale(1); }
+      0%, 100% { opacity: 0.85; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.06); }
     }
 
-    /* Ambient Drawing Doodles */
+    /* ==========================================================
+       3. BRIGHTER, RICHER AMBIENT DRAWING DOODLES
+       ========================================================== */
     .ambient-doodle {
       position: fixed;
       pointer-events: none;
       z-index: 50;
       font-family: 'Courier New', monospace;
       font-weight: 700;
-      color: #e2e8f0;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(144, 205, 244, 0.3);
-      animation: floatDoodle 5.8s ease-out forwards;
-      opacity: 0.75;
+      color: #ffffff;
+      /* Intense luminous chalk glow */
+      text-shadow: 
+        0 0 12px rgba(255, 255, 255, 0.85), 
+        0 0 24px rgba(144, 205, 244, 0.6);
+      animation: floatDoodle 5.5s ease-out forwards;
+      opacity: 0.88;
       letter-spacing: 0.08em;
     }
 
     @keyframes floatDoodle {
       0% { transform: translateY(0) scale(0.75) rotate(0deg); opacity: 0; }
-      20% { opacity: 0.85; transform: translateY(-30px) scale(1.05) rotate(5deg); }
-      75% { opacity: 0.85; }
-      100% { transform: translateY(-340px) scale(1.2) rotate(-8deg); opacity: 0; }
+      20% { opacity: 0.95; transform: translateY(-30px) scale(1.05) rotate(6deg); }
+      75% { opacity: 0.95; }
+      100% { transform: translateY(-380px) scale(1.2) rotate(-8deg); opacity: 0; }
     }
   </style>
 </head>
@@ -282,13 +305,11 @@
       { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3" }
     ];
 
-    let currentCard = null; // GUARANTEES ONLY ONE BOX ON SCREEN
-    let lineIndex = 0;
+    let currentCard = null; // Strictly only one box at a time
 
     function playLoop() {
       TIMED_LYRICS.forEach((item, idx) => {
         setTimeout(() => {
-          // Alternates: even index = LEFT, odd index = RIGHT
           const direction = (idx % 2 === 0) ? 'left' : 'right';
           spawnSingleCard(item.text, item.duration, item.emote, direction);
         }, item.time * 1000);
@@ -307,7 +328,9 @@
 
     function init() {
       fillCodeBackground();
-      setInterval(spawnAmbientDoodle, 500);
+      
+      // SPAWNS DOODLES MUCH FASTER (Every 180ms = rich stream of doodles!)
+      setInterval(spawnAmbientDoodle, 180);
       playLoop();
     }
 
@@ -319,16 +342,14 @@
     }
     window.addEventListener('resize', fillCodeBackground);
 
-    // SPAWNS ONLY ONE CARD (DISSOLVES PREVIOUS CARD)
+    // SPAWNS ONLY ONE CARD WITH CONTINUOUS UPWARD FLOW
     function spawnSingleCard(fullText, vocalDuration, emote, side) {
-      // 1. Remove previous card cleanly so only ONE box exists
       if (currentCard) {
         const oldCard = currentCard;
         oldCard.classList.add('exiting');
         setTimeout(() => oldCard.remove(), 350);
       }
 
-      // 2. Create the new big card
       const card = document.createElement('div');
       card.className = `sad-card ${side === 'left' ? 'from-left' : 'from-right'}`;
       card.innerHTML = `<div class="card-meta">✦ LATE NOVEMBER • 02:00 AM ✦</div><div class="card-lyric"></div>`;
@@ -340,33 +361,26 @@
       const screenH = window.innerHeight;
       let targetX, targetY;
 
-      // 3. Position: Alternating LEFT and RIGHT sides
       if (screenW < 750) {
-        // Mobile screen: slide in from left/right to center
         targetX = Math.max(16, (screenW - cardWidth) / 2);
-        targetY = screenH * 0.58;
+        targetY = screenH * 0.60;
       } else {
-        // iPad / Large Screen: Anchored to LEFT or RIGHT with margin
         const sideMargin = Math.max(40, screenW * 0.08);
-        if (side === 'left') {
-          targetX = sideMargin;
-        } else {
-          targetX = screenW - cardWidth - sideMargin;
-        }
-        targetY = screenH * 0.55;
+        targetX = (side === 'left') ? sideMargin : (screenW - cardWidth - sideMargin);
+        targetY = screenH * 0.58;
       }
 
       card.style.left = `${targetX}px`;
       card.style.top = `${targetY}px`;
 
-      // 4. Word-by-Word Engine
+      // Word-by-Word Engine
       const lyricEl = card.querySelector('.card-lyric');
       const words = fullText.split(' ');
       const perWordDelay = (vocalDuration * 1000) / words.length;
 
       words.forEach((word, index) => {
         setTimeout(() => {
-          if (!card.parentNode) return; // Prevent writing if card was removed
+          if (!card.parentNode) return;
           const span = document.createElement('span');
           span.className = 'lyric-word';
           span.textContent = word;
@@ -382,23 +396,25 @@
       });
     }
 
+    // EXPANDED POOL OF BRIGHT FLOATING DRAWING DOODLES
     function spawnAmbientDoodle() {
-      const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩'];
+      const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩', '⋆｡°', '୨୧', '☾'];
       const el = document.createElement('div');
       el.className = 'ambient-doodle';
       el.textContent = doodleList[Math.floor(Math.random() * doodleList.length)];
       
-      const size = Math.floor(13 + Math.random() * 8);
+      const size = Math.floor(13 + Math.random() * 9);
       el.style.fontSize = `${size}px`;
       
-      const x = Math.floor(Math.random() * (window.innerWidth - 45));
-      const y = Math.floor(window.innerHeight * 0.72 + Math.random() * (window.innerHeight * 0.22));
+      // Spawns smoothly across entire screen width
+      const x = Math.floor(Math.random() * (window.innerWidth - 40));
+      const y = Math.floor(window.innerHeight * 0.74 + Math.random() * (window.innerHeight * 0.22));
 
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
       document.body.appendChild(el);
 
-      setTimeout(() => el.remove(), 5800);
+      setTimeout(() => el.remove(), 5500);
     }
   </script>
 </body>
