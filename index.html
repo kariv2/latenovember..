@@ -17,7 +17,7 @@
       -webkit-user-select: none;
     }
 
-    /* 1. 100% SCREEN-FILLED CODE BACKGROUND */
+    /* 1. SCREEN-FILLED CODE BACKGROUND */
     #code-viewport {
       position: fixed;
       top: 0; left: 0;
@@ -32,6 +32,7 @@
       opacity: 0.82;
       pointer-events: none;
       overflow: hidden;
+      transition: filter 1s ease, opacity 1s ease;
     }
 
     .code-pane {
@@ -76,7 +77,38 @@
     }
 
     /* ==========================================================
-       2. EXTRA-LARGE SAD CARD (CONTINUOUS UPWARD FLOW)
+       2. BEAT DROP CINEMATIC SHOCKWAVE & SCREEN TREMOR
+       ========================================================== */
+    #beat-flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 60%, rgba(144, 205, 244, 0.45) 0%, rgba(15, 25, 45, 0.85) 100%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9000;
+    }
+    #beat-flash.active {
+      animation: shockwavePulse 2.8s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    }
+    @keyframes shockwavePulse {
+      0% { opacity: 0.95; }
+      20% { opacity: 0.35; }
+      100% { opacity: 0; }
+    }
+
+    /* Emotional Camera Tremor on Beat Drop */
+    body.tremor-active {
+      animation: emotionalTremor 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    @keyframes emotionalTremor {
+      10%, 90% { transform: translate3d(-1px, 2px, 0); }
+      20%, 80% { transform: translate3d(2px, -2px, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 2px, 0); }
+      40%, 60% { transform: translate3d(4px, -3px, 0); }
+    }
+
+    /* ==========================================================
+       3. EXTRA-LARGE SAD CARD (CONTINUOUS FLOW)
        ========================================================== */
     .sad-card {
       position: fixed;
@@ -86,8 +118,6 @@
       background: linear-gradient(150deg, rgba(21, 29, 44, 0.96) 0%, rgba(8, 13, 21, 0.98) 100%);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      
-      /* Brighter, sharper glowing border */
       border: 1.5px solid rgba(210, 230, 255, 0.55);
       border-radius: 16px;
       box-shadow: 
@@ -97,6 +127,7 @@
       z-index: 9999;
       pointer-events: none;
       will-change: transform, opacity;
+      transition: border-color 0.8s, box-shadow 0.8s, transform 0.8s;
     }
 
     .sad-card::before {
@@ -104,55 +135,44 @@
       border: 1px solid rgba(210, 230, 255, 0.25); border-radius: 11px; pointer-events: none;
     }
 
-    /* Continuous Flow Upwards from Left */
+    /* CLIMAX BLOOM (Ignites on the beat drop) */
+    .sad-card.climax-bloom {
+      border-color: rgba(188, 227, 255, 0.9) !important;
+      box-shadow: 
+        0 30px 65px rgba(0, 0, 0, 0.95),
+        0 0 50px rgba(144, 205, 244, 0.7),
+        inset 0 0 25px rgba(144, 205, 244, 0.35) !important;
+      animation: climaxHover 7.0s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
+    @keyframes climaxHover {
+      0% { transform: scale(1) translateY(0); }
+      15% { transform: scale(1.04) translateY(-15px); }
+      100% { transform: scale(1.02) translateY(-140px); opacity: 0.96; }
+    }
+
     .from-left {
       animation: flowFromLeft 6.8s cubic-bezier(0.12, 0.85, 0.3, 1) forwards;
     }
     @keyframes flowFromLeft {
-      0% {
-        opacity: 0;
-        transform: translate3d(-70px, 45px, 0) scale(0.92) rotate(-3deg);
-      }
-      12% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(-1.2deg);
-      }
-      100% {
-        opacity: 1;
-        /* Keeps gliding smoothly upwards */
-        transform: translate3d(18px, -110px, 0) scale(1) rotate(-0.5deg);
-      }
+      0% { opacity: 0; transform: translate3d(-70px, 45px, 0) scale(0.92) rotate(-3deg); }
+      12% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(-1.2deg); }
+      100% { opacity: 1; transform: translate3d(18px, -110px, 0) scale(1) rotate(-0.5deg); }
     }
 
-    /* Continuous Flow Upwards from Right */
     .from-right {
       animation: flowFromRight 6.8s cubic-bezier(0.12, 0.85, 0.3, 1) forwards;
     }
     @keyframes flowFromRight {
-      0% {
-        opacity: 0;
-        transform: translate3d(70px, 45px, 0) scale(0.92) rotate(3deg);
-      }
-      12% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(1.2deg);
-      }
-      100% {
-        opacity: 1;
-        /* Keeps gliding smoothly upwards */
-        transform: translate3d(-18px, -110px, 0) scale(1) rotate(0.5deg);
-      }
+      0% { opacity: 0; transform: translate3d(70px, 45px, 0) scale(0.92) rotate(3deg); }
+      12% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(1.2deg); }
+      100% { opacity: 1; transform: translate3d(-18px, -110px, 0) scale(1) rotate(0.5deg); }
     }
 
-    /* Smooth Dissolve Exit continuing upward */
     .sad-card.exiting {
-      animation: exitDissolve 0.35s ease-out forwards !important;
+      animation: exitDissolve 0.4s ease-out forwards !important;
     }
     @keyframes exitDissolve {
-      to {
-        opacity: 0;
-        transform: translateY(-145px) scale(0.94);
-      }
+      to { opacity: 0; transform: translateY(-145px) scale(0.94); }
     }
 
     .card-meta {
@@ -164,17 +184,16 @@
       text-align: center; 
       margin-bottom: 12px;
       text-shadow: 0 0 10px rgba(144, 205, 244, 0.4);
+      transition: color 0.6s;
     }
 
-    /* RADIANT BRIGHT LYRICS */
     .card-lyric {
-      color: #ffffff; /* Pure bright white */
+      color: #ffffff;
       font-size: clamp(20px, 2.5vw, 25px); 
       font-weight: 650; 
       line-height: 1.5;
       letter-spacing: -0.015em; 
       text-align: center; 
-      /* Brilliant illuminated white-blue bloom */
       text-shadow: 
         0 0 14px rgba(255, 255, 255, 0.85),
         0 0 28px rgba(144, 205, 244, 0.6),
@@ -211,9 +230,7 @@
       50% { opacity: 1; transform: scale(1.06); }
     }
 
-    /* ==========================================================
-       3. BRIGHTER, RICHER AMBIENT DRAWING DOODLES
-       ========================================================== */
+    /* 4. LUMINOUS AMBIENT DRAWING DOODLES */
     .ambient-doodle {
       position: fixed;
       pointer-events: none;
@@ -221,7 +238,6 @@
       font-family: 'Courier New', monospace;
       font-weight: 700;
       color: #ffffff;
-      /* Intense luminous chalk glow */
       text-shadow: 
         0 0 12px rgba(255, 255, 255, 0.85), 
         0 0 24px rgba(144, 205, 244, 0.6);
@@ -236,6 +252,25 @@
       75% { opacity: 0.95; }
       100% { transform: translateY(-380px) scale(1.2) rotate(-8deg); opacity: 0; }
     }
+
+    /* Burst Doodles for the Beat Drop (Shoots up in slow motion) */
+    .burst-doodle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9500;
+      font-family: 'Courier New', monospace;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 0 16px rgba(188, 227, 255, 0.9), 0 0 30px rgba(144, 205, 244, 0.8);
+      animation: burstFloat 6.5s cubic-bezier(0.12, 0.8, 0.25, 1) forwards;
+      opacity: 0;
+    }
+    @keyframes burstFloat {
+      0% { opacity: 0; transform: translateY(0) scale(0.6) rotate(0deg); }
+      10% { opacity: 1; transform: translateY(-40px) scale(1.15) rotate(var(--rot, 5deg)); }
+      80% { opacity: 0.9; }
+      100% { opacity: 0; transform: translateY(-550px) scale(1.3) rotate(calc(var(--rot, 5deg) * 2)); }
+    }
   </style>
 </head>
 <body>
@@ -243,9 +278,9 @@
   <!-- Dynamic code viewport -->
   <div id="code-viewport"></div>
   <div id="dark-veil"></div>
+  <div id="beat-flash"></div>
 
   <script>
-    // 1. DYNAMICALLY FILLS 100% OF SCREEN
     function fillCodeBackground() {
       const container = document.getElementById('code-viewport');
       container.innerHTML = '';
@@ -295,41 +330,90 @@
       }
     }
 
-    // 2. TIMED LYRICS (LEFT, RIGHT, LEFT, RIGHT...)
     const TIMED_LYRICS = [
       { time: 0.6,  text: "when i said, November's early", duration: 1.8, emote: "~ ♡" },
       { time: 2.8,  text: "to be playing these songs",     duration: 1.9, emote: "[ ♫ ]" },
       { time: 10.2, text: "now when i look back",          duration: 1.6, emote: "( . . )" },
       { time: 12.4, text: "i can see i was wrong",         duration: 1.8, emote: "</3" },
       { time: 17.2, text: "so what if i call",             duration: 2.4, emote: "[ ☎ ]" },
-      { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3" }
+      { time: 22.0, text: "and you pick up the phone?",    duration: 2.6, emote: "? <3", isClimax: true }
     ];
 
-    let currentCard = null; // Strictly only one box at a time
+    let currentCard = null;
 
     function playLoop() {
       TIMED_LYRICS.forEach((item, idx) => {
         setTimeout(() => {
           const direction = (idx % 2 === 0) ? 'left' : 'right';
-          spawnSingleCard(item.text, item.duration, item.emote, direction);
+          spawnSingleCard(item.text, item.duration, item.emote, direction, item.isClimax);
         }, item.time * 1000);
       });
 
-      // Clear the last card cleanly after the song ends, then loop
+      // EXACT BEAT DROP EVENT (Triggered at 24.8s right after "pick up the phone?")
+      setTimeout(triggerEmotionalBeatDrop, 24800);
+
+      // Loop restart at 32s (giving ample time to absorb the sadness)
       setTimeout(() => {
         if (currentCard) {
           currentCard.classList.add('exiting');
-          setTimeout(() => { currentCard?.remove(); currentCard = null; }, 350);
+          setTimeout(() => { currentCard?.remove(); currentCard = null; }, 400);
         }
-      }, 26500);
+      }, 30500);
 
-      setTimeout(playLoop, 28000);
+      setTimeout(playLoop, 32000);
+    }
+
+    // THE EMOTIONAL BEAT DROP ENGINE
+    function triggerEmotionalBeatDrop() {
+      // 1. Screen tremor & shockwave pulse
+      document.body.classList.add('tremor-active');
+      setTimeout(() => document.body.classList.remove('tremor-active'), 700);
+
+      const flash = document.getElementById('beat-flash');
+      flash.classList.add('active');
+      setTimeout(() => flash.classList.remove('active'), 2800);
+
+      // 2. Transform the active card into an emotional climax beacon
+      if (currentCard) {
+        currentCard.classList.add('climax-bloom');
+        const meta = currentCard.querySelector('.card-meta');
+        if (meta) {
+          meta.innerHTML = '✦ [ CALL DISCONNECTED • NO ANSWER ] ✦';
+          meta.style.color = '#90cdf4';
+        }
+      }
+
+      // 3. Erupt an emotional swarm of 45+ broken hearts & weeping stars
+      for (let i = 0; i < 45; i++) {
+        setTimeout(spawnBurstDoodle, i * 45);
+      }
+    }
+
+    function spawnBurstDoodle() {
+      const burstList = ['</3', '♡', '<3', '( . . )', '✧', '*ੈ✩', '˚₊·', '...', '˙ᵕ˙'];
+      const el = document.createElement('div');
+      el.className = 'burst-doodle';
+      el.textContent = burstList[Math.floor(Math.random() * burstList.length)];
+
+      const size = Math.floor(15 + Math.random() * 12);
+      el.style.fontSize = `${size}px`;
+
+      const rot = (Math.random() - 0.5) * 35;
+      el.style.setProperty('--rot', `${rot}deg`);
+
+      // Radiates across the screen, rising from bottom
+      const x = Math.floor(Math.random() * (window.innerWidth - 40));
+      const y = Math.floor(window.innerHeight * 0.70 + Math.random() * (window.innerHeight * 0.25));
+
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      document.body.appendChild(el);
+
+      setTimeout(() => el.remove(), 6500);
     }
 
     function init() {
       fillCodeBackground();
-      
-      // SPAWNS DOODLES MUCH FASTER (Every 180ms = rich stream of doodles!)
       setInterval(spawnAmbientDoodle, 180);
       playLoop();
     }
@@ -342,12 +426,11 @@
     }
     window.addEventListener('resize', fillCodeBackground);
 
-    // SPAWNS ONLY ONE CARD WITH CONTINUOUS UPWARD FLOW
-    function spawnSingleCard(fullText, vocalDuration, emote, side) {
+    function spawnSingleCard(fullText, vocalDuration, emote, side, isClimax) {
       if (currentCard) {
         const oldCard = currentCard;
         oldCard.classList.add('exiting');
-        setTimeout(() => oldCard.remove(), 350);
+        setTimeout(() => oldCard.remove(), 400);
       }
 
       const card = document.createElement('div');
@@ -363,17 +446,16 @@
 
       if (screenW < 750) {
         targetX = Math.max(16, (screenW - cardWidth) / 2);
-        targetY = screenH * 0.60;
+        targetY = screenH * 0.58;
       } else {
         const sideMargin = Math.max(40, screenW * 0.08);
         targetX = (side === 'left') ? sideMargin : (screenW - cardWidth - sideMargin);
-        targetY = screenH * 0.58;
+        targetY = screenH * 0.56;
       }
 
       card.style.left = `${targetX}px`;
       card.style.top = `${targetY}px`;
 
-      // Word-by-Word Engine
       const lyricEl = card.querySelector('.card-lyric');
       const words = fullText.split(' ');
       const perWordDelay = (vocalDuration * 1000) / words.length;
@@ -396,7 +478,6 @@
       });
     }
 
-    // EXPANDED POOL OF BRIGHT FLOATING DRAWING DOODLES
     function spawnAmbientDoodle() {
       const doodleList = ['<3', '♡', '</3', '✧', '˚₊·', '˙ᵕ˙', '( . . )', '[ ✉ ]', '*ੈ✩', '⋆｡°', '୨୧', '☾'];
       const el = document.createElement('div');
@@ -406,7 +487,6 @@
       const size = Math.floor(13 + Math.random() * 9);
       el.style.fontSize = `${size}px`;
       
-      // Spawns smoothly across entire screen width
       const x = Math.floor(Math.random() * (window.innerWidth - 40));
       const y = Math.floor(window.innerHeight * 0.74 + Math.random() * (window.innerHeight * 0.22));
 
@@ -418,4 +498,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
