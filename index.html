@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Merry Christmas, I Miss You</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #06080d;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-text-size-adjust: none;
+    }
+
+    /* 1. MICROSCOPIC BACKGROUND CODE (~3.5px) */
+    #code-viewport {
+      position: fixed;
+      top: 0; left: 0;
+      width: 170%;
+      height: 170%;
+      background-color: #06080d;
+      display: flex;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 6px;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      transform: scale(0.58);
+      transform-origin: top left;
+      z-index: 0;
+      opacity: 0.85;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .code-pane {
+      flex: 1;
+      display: flex;
+      padding: 8px 12px;
+      border-right: 1px solid #141a24;
+      overflow: hidden;
+    }
+
+    .gutter {
+      width: 30px;
+      text-align: right;
+      padding-right: 8px;
+      color: #273142;
+      user-select: none;
+      border-right: 1px solid #111622;
+    }
+
+    .code-content {
+      flex: 1;
+      padding-left: 10px;
+      white-space: pre;
+      color: #9aa5b5;
+    }
+
+    .kw { color: #f47067; font-weight: bold; }
+    .fn { color: #dcbdfb; }
+    .str { color: #96d0ff; }
+    .type { color: #8ddb8c; }
+    .hex { color: #6cb6ff; }
+    .comm { color: #3d4756; font-style: italic; }
+    .var { color: #adbac7; }
+
+    /* Dark Vignette Overlay */
+    #dark-veil {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 60%, rgba(8, 11, 16, 0.45) 0%, rgba(4, 6, 9, 0.88) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* 2. CLASSIC SAD MIDNIGHT LYRIC CARDS */
+    .sad-card {
+      position: fixed;
+      width: min(88vw, 320px);
+      min-height: 110px;
+      padding: 20px 22px;
+      background: linear-gradient(150deg, rgba(21, 29, 42, 0.94) 0%, rgba(9, 14, 23, 0.96) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(176, 196, 222, 0.35);
+      border-radius: 12px;
+      box-shadow: 
+        0 16px 36px rgba(0, 0, 0, 0.85),
+        0 4px 18px rgba(30, 58, 95, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      z-index: 50;
+      pointer-events: none;
+      animation: 
+        cardEntrance 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.25) forwards,
+        cardDrift 8.0s linear forwards 0.4s;
+      will-change: transform, opacity;
+    }
+
+    .sad-card::before {
+      content: ''; position: absolute; inset: 5px;
+      border: 1px solid rgba(176, 196, 222, 0.15); border-radius: 7px; pointer-events: none;
+    }
+
+    .card-meta {
+      font-family: 'Courier New', monospace; font-size: 10.5px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(176, 196, 222, 0.6); text-align: center; margin-bottom: 7px;
+    }
+
+    .card-lyric {
+      color: #edf2f7; font-size: 16.5px; font-weight: 500; line-height: 1.45;
+      letter-spacing: -0.01em; text-align: center; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .lyric-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: wordReveal 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      margin: 0 2px;
+    }
+    @keyframes wordReveal { to { opacity: 1; transform: translateY(0); } }
+
+    .doodle-emote {
+      display: inline-block;
+      margin-left: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #90cdf4;
+      border: 1px solid rgba(144, 205, 244, 0.35);
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: rgba(144, 205, 244, 0.08);
+      letter-spacing: 0.05em;
+      animation: gentlePulse 1.4s ease infinite;
+      vertical-align: middle;
+    }
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Ambient Drawing Doodles */
+    .ambient-doodle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 30;
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: #e2e8f0;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(144, 205, 244, 0.3);
+      animation: floatDoodle 5.8s ease-out forwards;
+      opacity: 0.75;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes floatDoodle {
+      0% { transform: translateY(0) scale(0.75) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.85; transform: translateY(-30px) scale(1.05) rotate(5deg); }
+      75% { opacity: 0.85; }
+      100% { transform: translateY(-340px) scale(1.2) rotate(-8deg); opacity: 0; }
+    }
+
+    @keyframes cardEntrance { 0% { transform: scale(0.9) translateY(14px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+    @keyframes cardDrift { 0% { transform: translateY(0); opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(-460px); opacity: 0; } }
+
+    /* 3. GUARANTEED VISIBLE START SCREEN */
+    #start-screen {
+      position: fixed !important;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 7, 11, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #edf2f7;
+      z-index: 99999;
+      cursor: pointer;
+    }
+    #start-btn {
+      padding: 18px 46px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #e2e8f0;
+      border: 1px solid rgba(176, 196, 222, 0.4);
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.8);
+      transition: transform 0.2s ease;
+    }
+    #start-btn:active { transform: scale(0.96); }
+    .subtitle { margin-top: 14px; opacity: 0.6; font-size: 13px; font-family: 'Courier New', monospace; }
+  </style>
+</head>
+<body onclick="startShow()">
+
+  <!-- MICROSCOPIC COMPLEX CODE WALL -->
+  <div id="code-viewport">
+    <div class="code-pane">
+      <div class="gutter">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50
+      </div>
+      <div class="code-content">
+<span class="kw">#include</span> <span class="str">&lt;immintrin.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;complex&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+
+<span class="comm">// FAST FOURIER AUDIO SPECTRUM KERNEL (AVX-512)</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">Scalar</span>&gt;
+<span class="kw">struct</span> <span class="type">FFTSpectrumEngine</span> {
+    <span class="type">size_t</span> <span class="var">dim</span>;
+    <span class="type">std::vector</span>&lt;<span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;&gt; <span class="var">omega</span>;
+    <span class="type">uintptr_t</span> <span class="var">m_alloc_ptr</span> = <span class="hex">0x7FFE9B42A000</span>;
+
+    <span class="fn">FFTSpectrumEngine</span>(<span class="type">size_t</span> <span class="var">n</span>) : <span class="var">dim</span>(<span class="var">n</span>) {
+        <span class="var">omega</span>.<span class="fn">resize</span>(<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>);
+        <span class="kw">for</span> (<span class="type">size_t</span> <span class="var">k</span> = <span class="hex">0</span>; <span class="var">k</span> &lt; (<span class="var">dim</span> &gt;&gt; <span class="hex">1</span>); ++<span class="var">k</span>) {
+            <span class="type">Scalar</span> <span class="var">theta</span> = -<span class="hex">2.0</span> * <span class="hex">3.141592653589793</span> * <span class="var">k</span> / <span class="var">dim</span>;
+            <span class="var">omega</span>[<span class="var">k</span>] = <span class="type">std::complex</span>&lt;<span class="type">Scalar</span>&gt;(<span class="fn">cos</span>(<span class="var">theta</span>), <span class="fn">sin</span>(<span class="var">theta</span>));
+        }
+    }
+};
+
+<span class="comm">// HESSIAN DRIFT ACCUMULATOR</span>
+<span class="kw">class</span> <span class="type">NonlinearDriftSolver</span> {
+<span class="kw">public</span>:
+    <span class="type">double</span> <span class="var">jacobian_tensor</span>[<span class="hex">4</span>][<span class="hex">4</span>];
+    <span class="type">double</span> <span class="var">covariance_state</span>[<span class="hex">16</span>];
+
+    <span class="type">void</span> <span class="fn">recompute_spatial_matrix</span>(<span class="type">double</span> <span class="var">dt</span>) {
+        <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="hex">0</span>; <span class="var">i</span> &lt; <span class="hex">4</span>; ++<span class="var">i</span>) {
+            <span class="kw">for</span> (<span class="type">int</span> <span class="var">j</span> = <span class="hex">0</span>; <span class="var">j</span> &lt; <span class="hex">4</span>; ++<span class="var">j</span>) {
+                <span class="var">jacobian_tensor</span>[<span class="var">i</span>][<span class="var">j</span>] = (<span class="var">i</span> == <span class="var">j</span>) ? <span class="hex">1.0</span> : <span class="fn">sin</span>(<span class="var">dt</span>) * <span class="hex">0.024</span>;
+            }
+        }
+    }
+};
+      </div>
+    </div>
+
+    <div class="code-pane">
+      <div class="gutter">
+51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70
+      </div>
+      <div class="code-content">
+<span class="kw">import</span> asyncio, struct
+<span class="kw">from</span> typing <span class="kw">import</span> <span class="type">AsyncGenerator</span>
+
+<span class="comm"># DISPATCHER (NOCTURNAL TELEMETRY)</span>
+<span class="kw">class</span> <span class="type">AsyncSignalMultiplexer</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.<span class="var">entropy_pool</span> = [<span class="hex">0x9E3779B9</span>, <span class="hex">0x85EBCA6B</span>]
+
+    <span class="kw">async def</span> <span class="fn">stream_cadence</span>(self) -> <span class="type">AsyncGenerator</span>:
+        <span class="var">cues</span> = [
+            (<span class="hex">0.6</span>,  <span class="str">"when i said, November's early"</span>, <span class="str">"~ ♡"</span>),
+            (<span class="hex">2.8</span>,  <span class="str">"to be playing these songs"</span>,     <span class="str">"[ ♫ ]"</span>),
+            (<span class="hex">10.2</span>, <span class="str">"now when i look back"</span>,          <span class="str">"( . . )"</span>),
+            (<span class="hex">12.4</span>, <span class="str">"i can see i was wrong"</span>,         <span class="str">"&lt;/3"</span>),
+            (<span class="hex">17.2</span>, <span class="str">"so what if i call"</span>,             <span class="str">"[ ☎ ]"</span>),
+            (<span class="hex">22.0</span>, <span class="str">"and you pick up the phone?"</span>,    <span class="str">"? &lt;3"</span>)
